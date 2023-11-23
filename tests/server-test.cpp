@@ -10,16 +10,16 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2){
+    if (argc != 3){
         usage();
         return 0;
     }
     net_protocol pro;
 
     if (strcmp(argv[1], "ipv4"))
-        pro.domain = AF_INET;
+        pro.domain_ = AF_INET;
     else if (strcmp(argv[1], "ipv6"))
-        pro.domain = AF_INET6;
+        pro.domain_ = AF_INET6;
     /*else if (strcmp(argv[1], "bluetooth")) {
         pro.domain = AF_BTH;
     }*/
@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[2], "TCP") == 0)
     {
-        pro.type = SOCK_STREAM;
+        pro.type_ = SOCK_STREAM;
     }else if (strcmp(argv[2], "UDP") == 0)
     {
-        pro.type = SOCK_DGRAM;
+        pro.type_ = SOCK_DGRAM;
     }
     else
     {
@@ -43,7 +43,13 @@ int main(int argc, char *argv[])
         return -2;
     }
 
-    int sock = socket(pro.domain, pro.domain, 0);
-
+    int sock = socket(pro.domain_, pro.type_, 0);
+    if (sock == -1)
+    {
+        fprintf(stderr, "socket creating is error\n");
+        return -3;
+    }
+    
+    std::cout<< "socket creating is success\n";
     close(sock);
 }
