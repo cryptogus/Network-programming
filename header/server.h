@@ -6,8 +6,8 @@
 // TCP: SOCK_STREAM, UDP: SOCK_DGRAM
 struct net_protocol
 {
-    int domain;
-    int type;
+    int domain_;
+    int type_;
 };
 
 #ifdef __linux__
