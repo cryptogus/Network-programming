@@ -10,6 +10,14 @@ struct net_protocol
     int type_;
 };
 
+class TCPServer
+{
+    // creating socket func
+
+    // bind
+
+    // listen
+};
 #ifdef __linux__
 #include <errno.h>
 #include <sys/types.h>
