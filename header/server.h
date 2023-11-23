@@ -2,10 +2,19 @@
 
 #include <stdint.h>
 
+// ip ver 4 or 6
+// TCP: SOCK_STREAM, UDP: SOCK_DGRAM
+struct net_protocol
+{
+    int domain;
+    int type;
+};
+
 #ifdef __linux__
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+
 
 /*
     __linux__       Defined on Linux
