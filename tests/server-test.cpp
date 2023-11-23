@@ -5,22 +5,27 @@
 void usage()
 {
     printf("syntax: server-test <ip version> <protocol>\n");
-    printf("sample: server-test 4 TCP\n");
+    printf("sample: server-test ipv4 TCP\n");
 }
 
 int main(int argc, char *argv[])
 {
+    if (argc != 2){
+        usage();
+        return 0;
+    }
     net_protocol pro;
 
-    if (argv[1] == '4')
+    if (strcmp(argv[1], "ipv4"))
         pro.domain = AF_INET;
-    else if (argv[1] == '6')
+    else if (strcmp(argv[1], "ipv6"))
         pro.domain = AF_INET6;
-    else if (strcmp(argv[1], "bluetooth")) {
+    /*else if (strcmp(argv[1], "bluetooth")) {
         pro.domain = AF_BTH;
-    }
+    }*/
     else {
-        fprintf(stderr,"domain error\n");
+        fprintf(stderr,"domain error\n\n");
+        usage();
         return -1;
     }
 
@@ -33,7 +38,8 @@ int main(int argc, char *argv[])
     }
     else
     {
-        fprintf(stderr,"type error\n");
+        fprintf(stderr,"type error\n\n");
+        usage();
         return -2;
     }
 
