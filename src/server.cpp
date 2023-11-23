@@ -1,0 +1,47 @@
+#include "server.h"
+
+TcpServer::TcpServer(QObject* parent) : Server(parent) {
+	qDebug() << "";
+}
+
+TcpServer::~TcpServer() {
+	qDebug() << "";
+	close();
+}
+
+bool TcpServer::bind() {
+	acceptSock_ = ::socket(AF_INET, SOCK_STREAM, 0);
+	if (acceptSock_ == -1) {
+		SET_ERR(GErr::Fail, QString("socket return -1 %1").arg(strerror(errno)));
+		return false;
+	}
+
+	int res;
+#ifdef __linux__
+	int optval = 1;
+	res = ::setsockopt(acceptSock_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+	if (res == -1) {
+		SET_ERR(GErr::Fail, QString("setsockopt return -1 %1").arg(strerror(errno)));
+		return false;
+	}
+#endif // __linux
+
+	struct sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons(port_);
+
+	ssize_t res2 = ::bind(acceptSock_, (struct sockaddr *)&addr, sizeof(addr));
+	if (res2 == -1) {
+		SET_ERR(GErr::Fail, QString("bind return -1 %1").arg(strerror(errno)));
+		return false;
+	}
+
+	res = ::listen(acceptSock_, 5);
+	if (res == -1) {
+		SET_ERR(GErr::Fail, QString("listen return -1 %1").arg(strerror(errno)));
+		return false;
+	}
+
+	return true;
+}

@@ -10,7 +10,7 @@ struct net_protocol
     int type_;
 };
 
-class TCPServer
+class TcpServer
 {
     // creating socket func
 
