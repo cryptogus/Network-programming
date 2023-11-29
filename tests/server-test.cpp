@@ -18,11 +18,11 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[1], "ipv4")) {
         pro.domain_ = AF_INET;
-        sockaddr_in net_addr;
+        sockaddr_in net_addr; // ipv4용 소켓 구조체
     }
     else if (strcmp(argv[1], "ipv6")) {
         pro.domain_ = AF_INET6;
-        sockaddr_in6 net_addr;
+        sockaddr_in6 net_addr; // ipv6용 소켓 구조체
     }
     /*else if (strcmp(argv[1], "bluetooth")) {
         pro.domain = AF_BTH;
