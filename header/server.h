@@ -28,12 +28,8 @@ private:
 
     // listen
 public:
-    // 생성자
-    // loof back
-    TcpServer(/*char *ip = "127.0.0.1"*/) {
-        inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-        inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
-    }
+    // 생성자(루프백으로 초기화)
+    TcpServer(/*char *ip = "127.0.0.1"*/);
 
     void PtonResult(void);
     void NtopResult(void);

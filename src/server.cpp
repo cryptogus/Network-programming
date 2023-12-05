@@ -1,5 +1,10 @@
 #include "server.h"
 
+TcpServer::TcpServer(void) {
+	inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+    inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
+}
+
 void TcpServer::PtonResult(void) {
 	printf("(IP) presentation to numberic\n");
     printf("%#x\n", addr.sin_addr.s_addr);
