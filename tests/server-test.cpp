@@ -14,7 +14,10 @@ int main(int argc, char *argv[])
         usage();
         return 0;
     }
-    net_protocol pro;
+    TcpServer ip;
+    ip.PtonResult();
+    ip.NtopResult();
+    /*net_protocol pro;
 
     if (strcmp(argv[1], "ipv4")) {
         pro.domain_ = AF_INET;
@@ -24,9 +27,9 @@ int main(int argc, char *argv[])
         pro.domain_ = AF_INET6;
         sockaddr_in6 net_addr; // ipv6용 소켓 구조체
     }
-    /*else if (strcmp(argv[1], "bluetooth")) {
-        pro.domain = AF_BTH;
-    }*/
+    //else if (strcmp(argv[1], "bluetooth")) {
+    //    pro.domain = AF_BTH;
+    //}
     else {
         fprintf(stderr,"domain error\n\n");
         usage();
@@ -52,5 +55,5 @@ int main(int argc, char *argv[])
     }
     
     std::cout<< "socket creating is success\n";
-    close(sock);
+    close(sock);*/
 }

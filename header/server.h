@@ -1,23 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <stdint.h>
 
-// ip ver 4 or 6
-// TCP: SOCK_STREAM, UDP: SOCK_DGRAM
-struct net_protocol
-{
-    int domain_;
-    int type_;
-};
-
-class TcpServer
-{
-    // creating socket func
-
-    // bind
-
-    // listen
-};
 #ifdef __linux__
 #include <errno.h>
 #include <sys/types.h>
@@ -27,6 +12,53 @@ class TcpServer
 #include <arpa/inet.h>
 
 #endif
+// ip ver 4 or 6
+// TCP: SOCK_STREAM, UDP: SOCK_DGRAM
+
+class TcpServer
+{
+
+private:
+    // ipv4
+    sockaddr_in addr;
+    // ipv6
+    sockaddr_in6 addr6;
+
+    // bind
+
+    // listen
+public:
+    // 생성자
+    // loof back
+    TcpServer(/*char *ip = "127.0.0.1"*/) {
+        inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+        inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
+    }
+
+    void PtonResult() {
+        printf("(IP) presentation to numberic\n");
+        printf("%#x\n", addr.sin_addr.s_addr);
+        //in6_addr ip;
+        //ip.s6_addr == ip.__in6_u.__u6_addr8;
+        for (int i = 0; i < 16; i++)
+            printf("%02x", addr6.sin6_addr.__in6_u.__u6_addr8[i]);
+        printf("\n");
+    }
+
+    void NtopResult() {
+        printf("(IP) numberic to presentation\n");
+        char ip4Buffer[INET_ADDRSTRLEN];
+        char ip6Buffer[INET6_ADDRSTRLEN];
+        inet_ntop(AF_INET, &addr.sin_addr, ip4Buffer, sizeof(ip4Buffer));
+        inet_ntop(AF_INET6, &addr6.sin6_addr, ip6Buffer, sizeof(ip6Buffer));
+        printf("%s\n", ip4Buffer);
+        printf("%s\n", ip6Buffer);
+    }
+    // check value
+    bool Setaddr (sockaddr_in addr_) const;
+    bool Setaddr6 (sockaddr_in6 addr6_) const;
+};
+
 
 /*
     __linux__       Defined on Linux
