@@ -1,47 +1,23 @@
 #include "server.h"
 
-TcpServer::TcpServer(QObject* parent) : Server(parent) {
-	qDebug() << "";
+void TcpServer::PtonResult(void) {
+	printf("(IP) presentation to numberic\n");
+    printf("%#x\n", addr.sin_addr.s_addr);
+    //in6_addr ip;
+    //ip.s6_addr == ip.__in6_u.__u6_addr8;
+    for (int i = 0; i < 16; i++)
+        printf("%02x", addr6.sin6_addr.__in6_u.__u6_addr8[i]);
+    printf("\n");
 }
 
-TcpServer::~TcpServer() {
-	qDebug() << "";
-	close();
+void TcpServer::NtopResult(void) {
+    printf("(IP) numberic to presentation\n");
+    char ip4Buffer[INET_ADDRSTRLEN];
+    char ip6Buffer[INET6_ADDRSTRLEN];
+    inet_ntop(AF_INET, &addr.sin_addr, ip4Buffer, sizeof(ip4Buffer));
+    inet_ntop(AF_INET6, &addr6.sin6_addr, ip6Buffer, sizeof(ip6Buffer));
+    printf("%s\n", ip4Buffer);
+    printf("%s\n", ip6Buffer);
 }
+	
 
-bool TcpServer::bind() {
-	acceptSock_ = ::socket(AF_INET, SOCK_STREAM, 0);
-	if (acceptSock_ == -1) {
-		SET_ERR(GErr::Fail, QString("socket return -1 %1").arg(strerror(errno)));
-		return false;
-	}
-
-	int res;
-#ifdef __linux__
-	int optval = 1;
-	res = ::setsockopt(acceptSock_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-	if (res == -1) {
-		SET_ERR(GErr::Fail, QString("setsockopt return -1 %1").arg(strerror(errno)));
-		return false;
-	}
-#endif // __linux
-
-	struct sockaddr_in addr;
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = INADDR_ANY;
-	addr.sin_port = htons(port_);
-
-	ssize_t res2 = ::bind(acceptSock_, (struct sockaddr *)&addr, sizeof(addr));
-	if (res2 == -1) {
-		SET_ERR(GErr::Fail, QString("bind return -1 %1").arg(strerror(errno)));
-		return false;
-	}
-
-	res = ::listen(acceptSock_, 5);
-	if (res == -1) {
-		SET_ERR(GErr::Fail, QString("listen return -1 %1").arg(strerror(errno)));
-		return false;
-	}
-
-	return true;
-}
