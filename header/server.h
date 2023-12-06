@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdint.h>
+#include <cstring>
 
 #ifdef __linux__
 #include <errno.h>
@@ -28,8 +29,10 @@ private:
 
     // listen
 public:
-    // 생성자(루프백으로 초기화)
-    TcpServer(/*char *ip = "127.0.0.1"*/);
+    // 생성자(루프백으로 초기화, port 12345)
+    TcpServer();
+    // ipv4
+    TcpServer(char *ip = "127.0.0.1", char *port = "12345");
 
     void PtonResult(void);
     void NtopResult(void);

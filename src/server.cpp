@@ -1,8 +1,17 @@
 #include "server.h"
 
 TcpServer::TcpServer(void) {
+    memset(&addr, 0 ,sizeof(addr));
+    memset(&addr6, 0 ,sizeof(addr6));
+
+    addr.sin_family = AF_INET;
+    addr6.sin6_family = AF_INET6;
+
 	inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
     inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
+
+    addr.sin_port = htons(12345);
+    addr6.sin6_port = htons(12345);
 }
 
 void TcpServer::PtonResult(void) {
