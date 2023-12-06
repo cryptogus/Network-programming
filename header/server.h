@@ -32,13 +32,14 @@ public:
     // 생성자(루프백으로 초기화, port 12345)
     TcpServer();
     // ipv4
-    TcpServer(char *ip = "127.0.0.1", char *port = "12345");
+    // TcpServer(char *ip = "127.0.0.1", char *port = "12345");
+    TcpServer(char *ip, char *port);
 
     void PtonResult(void);
     void NtopResult(void);
     // check value
-    bool Setaddr (sockaddr_in addr_) const;
-    bool Setaddr6 (sockaddr_in6 addr6_) const;
+    bool Setaddr (void) const;
+    bool Setaddr6 (void) const;
 };
 
 

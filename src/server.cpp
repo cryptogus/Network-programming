@@ -33,5 +33,34 @@ void TcpServer::NtopResult(void) {
     printf("%s\n", ip4Buffer);
     printf("%s\n", ip6Buffer);
 }
-	
 
+// only ipv4
+bool TcpServer::Setaddr(void) const{
+    if (addr.sin_family != AF_INET) {
+        fprintf(stderr, "ipv4 family is error\n");
+        return false;
+    }
+    if (!addr.sin_addr.s_addr) {
+        fprintf(stderr, "please input ip\n");
+        return false;
+    }
+    if (!addr.sin_port) {
+        fprintf(stderr, "please input port\n");
+        return false;
+    }
+}
+// unfinished
+bool TcpServer::Setaddr6(void) const{
+    if (addr6.sin6_family != AF_INET6) {
+        fprintf(stderr, "ipv6 family is error\n");
+        return false;
+    }
+    if (!addr6.sin6_addr.s6_addr32[0] && !addr6.sin6_addr.s6_addr32[1] && !addr6.sin6_addr.s6_addr32[2] && !addr6.sin6_addr.s6_addr32[3]) {
+        fprintf(stderr, "please input ipv6\n");
+        return false;
+    }
+    if (!addr6.sin6_port) {
+        fprintf(stderr, "please input port\n");
+        return false;
+    }
+}
