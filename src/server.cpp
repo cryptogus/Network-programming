@@ -71,7 +71,7 @@ listen 함수호출을 통해서 "연결 요청 대기상태"
 accept: 클라이언트 접속 요청 수락 함수
 */
     while(true) {
-        int addrlen = 0;
+        socklen_t addrlen = 0;
         client_sock_ = accept(listen_sock_, (struct sockaddr *)&client_addr, &addrlen);
         if (client_sock_ == -1) {
             fprintf(stderr, "accept error\n");
@@ -80,9 +80,32 @@ accept: 클라이언트 접속 요청 수락 함수
 
         // 접속한 client 정보
         inet_ntop(AF_INET, &client_addr.sin_addr, ipv4, sizeof(ipv4));
-        printf("\n[TCP 서버] client 정보: IP: %s, Port:%d\n", ipv4, client_addr.sin_port);
+        printf("\n[TCP 서버] client 정보: IP: %s, Port:%d\n", ipv4, ntohs(client_addr.sin_port));
 
+        while (true) {
+            int retval = recv(client_sock_, buf, BUFSIZ, 0); 
+            if (retval == -1) {
+                fprintf(stderr, "recv fail\n");
+                break;
+            }else if (retval == 0) {
+                // 입력이 아무것도 없을 때
+                break;
+            }
+
+            // 받은 데이터 출력
+            buf[retval + 1] = '\0';
+            printf("\n[TCP %s:%d] %s\n",ipv4, ntohs(client_addr.sin_port), buf);
+
+            // send -> 데이터 보내기, client가 보낸만큼 다시 보내 줄 것
+            retval = send(client_sock_, buf, retval, 0);
+            if (retval == -1) {
+                fprintf(stderr, "send error\n");
+                break;
+            }
+        }
+        close(client_sock_);
     }
+    close(listen_sock_);
 
 }
 

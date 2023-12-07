@@ -30,6 +30,8 @@ private:
     // socket
     int listen_sock_;
     int client_sock_;
+    // buffer -> client가 입력한 값을 받아오는 buffer
+    char buf[BUFSIZ + 1];
 public:
     // 생성자(루프백으로 초기화, port 12345)
     TcpServer();
