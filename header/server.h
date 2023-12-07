@@ -23,11 +23,13 @@ private:
     // ipv4
     sockaddr_in addr;
     char ipv4[INET_ADDRSTRLEN];
+    sockaddr_in client_addr;
     // ipv6
     sockaddr_in6 addr6;
     char ipv6[INET6_ADDRSTRLEN];
     // socket
     int listen_sock_;
+    int client_sock_;
 public:
     // 생성자(루프백으로 초기화, port 12345)
     TcpServer();
