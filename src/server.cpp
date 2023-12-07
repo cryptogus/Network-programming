@@ -131,7 +131,7 @@ void TcpServer::NtopResult(void) {
 }
 
 // only ipv4
-bool TcpServer::Setaddr(void) const{
+bool TcpServer::Setaddr(void) const {
     if (addr.sin_family != AF_INET) {
         fprintf(stderr, "ipv4 family is error\n");
         return false;
@@ -145,9 +145,10 @@ bool TcpServer::Setaddr(void) const{
         fprintf(stderr, "please input port\n");
         return false;
     }
+    return true;
 }
 // unfinished
-bool TcpServer::Setaddr6(void) const{
+bool TcpServer::Setaddr6(void) const {
     if (addr6.sin6_family != AF_INET6) {
         fprintf(stderr, "ipv6 family is error\n");
         return false;
@@ -161,4 +162,5 @@ bool TcpServer::Setaddr6(void) const{
         fprintf(stderr, "please input port\n");
         return false;
     }
+    return true;
 }
