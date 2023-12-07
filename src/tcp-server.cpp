@@ -24,7 +24,7 @@ TcpServer::TcpServer(char *ip, char *port)/* : ipv4(ip)*/{
     memset(&addr, 0 ,sizeof(addr));
     
     addr.sin_family = AF_INET;
-
+    // this->ip=ip;
     inet_pton(AF_INET, ip, &addr.sin_addr);
     int port_ = std::stoi(port);
     addr.sin_port = htons(port_);

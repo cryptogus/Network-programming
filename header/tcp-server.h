@@ -20,6 +20,7 @@ class TcpServer
 {
 
 private:
+    // char *ip;
     // ipv4
     sockaddr_in addr;
     char ipv4[INET_ADDRSTRLEN];
