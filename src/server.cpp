@@ -6,9 +6,15 @@ TcpServer::TcpServer(void) {
 
     addr.sin_family = AF_INET;
     addr6.sin6_family = AF_INET6;
-
+    // for client 향후 client로 이동 예정
 	inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
     inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
+    // server는 ip주소를 줄 필요가 없다.
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr6.sin6_addr.__in6_u.__u6_addr32[0] = htonl(INADDR_ANY);
+    addr6.sin6_addr.__in6_u.__u6_addr32[1] = htonl(INADDR_ANY);
+    addr6.sin6_addr.__in6_u.__u6_addr32[2] = htonl(INADDR_ANY);
+    addr6.sin6_addr.__in6_u.__u6_addr32[3] = htonl(INADDR_ANY);
 
     addr.sin_port = htons(12345);
     addr6.sin6_port = htons(12345);
@@ -29,7 +35,31 @@ TcpServer::~TcpServer(void) {
 }
 
 int TcpServer::run(void) {
-    
+    listen_sock_ = socket(addr.sin_family, SOCK_STREAM, 0);
+    if (listen_sock_ == -1) {
+        fprintf(stderr, "Socket creation error\n");
+        return -1;
+    }
+/*
+bind() - 주소정보 할당
+
+○ 함수원형
+  int bind(int sockfd, struct sockaddr *myaddr, int addrlen)
+
+○ 리턴 값
+  성공 시 : 0, 실패 시 : -1
+
+- sockfd : 주소를 할당하고자 하는 소켓의 파일 디스크립터
+- myaddr : 할당하고자 하는 주소 정보를 지니고 있는 sockaddr 구조체 변수의 포인터 인자 값
+- addrlen : 인자로 전달된 주소 정보 구조체의 길이
+
+=> 함수 호출이 성공하면 sockfd가 가리키는 소켓에 myaddr이 가리키는 주소 정보가 할당된다.
+
+*/
+    if (bind(listen_sock_, (struct sockaddr *)&addr, sizeof(addr)) == -1) {
+        fprintf(stderr, "Socket bind error\n");
+        return -1;
+    }
 }
 
 void TcpServer::PtonResult(void) {

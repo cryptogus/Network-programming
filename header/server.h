@@ -26,9 +26,8 @@ private:
     // ipv6
     sockaddr_in6 addr6;
     char ipv6[INET6_ADDRSTRLEN];
-    // bind
-
-    // listen
+    // socket
+    int listen_sock_;
 public:
     // 생성자(루프백으로 초기화, port 12345)
     TcpServer();
