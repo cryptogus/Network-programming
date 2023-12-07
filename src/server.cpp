@@ -14,6 +14,24 @@ TcpServer::TcpServer(void) {
     addr6.sin6_port = htons(12345);
 }
 
+TcpServer::TcpServer(char *ip, char *port)/* : ipv4(ip)*/{
+    memset(&addr, 0 ,sizeof(addr));
+    
+    addr.sin_family = AF_INET;
+
+    inet_pton(AF_INET, ip, &addr.sin_addr);
+    int port_ = std::stoi(port);
+    addr.sin_port = htons(port_);
+}
+
+TcpServer::~TcpServer(void) {
+    disconnect();
+}
+
+int TcpServer::run(void) {
+    
+}
+
 void TcpServer::PtonResult(void) {
 	printf("(IP) presentation to numberic\n");
     printf("%#x\n", addr.sin_addr.s_addr);

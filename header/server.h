@@ -22,9 +22,10 @@ class TcpServer
 private:
     // ipv4
     sockaddr_in addr;
+    char ipv4[INET_ADDRSTRLEN];
     // ipv6
     sockaddr_in6 addr6;
-
+    char ipv6[INET6_ADDRSTRLEN];
     // bind
 
     // listen
@@ -34,6 +35,10 @@ public:
     // ipv4
     // TcpServer(char *ip = "127.0.0.1", char *port = "12345");
     TcpServer(char *ip, char *port);
+    ~TcpServer();
+    
+    // server 실행
+    int run(void);
 
     void PtonResult(void);
     void NtopResult(void);
