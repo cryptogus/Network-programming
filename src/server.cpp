@@ -31,7 +31,7 @@ TcpServer::TcpServer(char *ip, char *port)/* : ipv4(ip)*/{
 }
 
 TcpServer::~TcpServer(void) {
-    disconnect();
+    close(listen_sock_);
 }
 
 int TcpServer::run(void) {
@@ -60,8 +60,16 @@ bind() - 주소정보 할당
         fprintf(stderr, "Socket bind error\n");
         return -1;
     }
+/*
+listen 함수호출을 통해서 "연결 요청 대기상태"
+*/
+    if (listen(listen_sock_, SOMAXCONN) == -1) {
+        fprintf(stderr, "Socket bind error\n");
+        return -1;
+    }
 }
 
+// for client 향후 client로 이동 예정
 void TcpServer::PtonResult(void) {
 	printf("(IP) presentation to numberic\n");
     printf("%#x\n", addr.sin_addr.s_addr);
@@ -71,7 +79,7 @@ void TcpServer::PtonResult(void) {
         printf("%02x", addr6.sin6_addr.__in6_u.__u6_addr8[i]);
     printf("\n");
 }
-
+// for client 향후 client로 이동 예정
 void TcpServer::NtopResult(void) {
     printf("(IP) numberic to presentation\n");
     char ip4Buffer[INET_ADDRSTRLEN];
@@ -88,6 +96,7 @@ bool TcpServer::Setaddr(void) const{
         fprintf(stderr, "ipv4 family is error\n");
         return false;
     }
+    // for client 향후 client로 이동 예정
     if (!addr.sin_addr.s_addr) {
         fprintf(stderr, "please input ip\n");
         return false;
@@ -103,6 +112,7 @@ bool TcpServer::Setaddr6(void) const{
         fprintf(stderr, "ipv6 family is error\n");
         return false;
     }
+    // for client 향후 client로 이동 예정
     if (!addr6.sin6_addr.s6_addr32[0] && !addr6.sin6_addr.s6_addr32[1] && !addr6.sin6_addr.s6_addr32[2] && !addr6.sin6_addr.s6_addr32[3]) {
         fprintf(stderr, "please input ipv6\n");
         return false;
