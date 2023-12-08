@@ -16,8 +16,7 @@
 // ip ver 4 or 6
 // TCP: SOCK_STREAM, UDP: SOCK_DGRAM
 
-class TcpServer
-{
+class TcpServer {
 
 private:
     // char *ip;
@@ -38,7 +37,7 @@ public:
     TcpServer();
     // ipv4
     // TcpServer(char *ip = "127.0.0.1", char *port = "12345");
-    TcpServer(char *ip, char *port);
+    TcpServer(char *port);
     ~TcpServer();
     
     // server 실행

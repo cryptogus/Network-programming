@@ -6,9 +6,7 @@ TcpServer::TcpServer(void) {
 
     addr.sin_family = AF_INET;
     addr6.sin6_family = AF_INET6;
-    // for client 향후 client로 이동 예정
-	inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-    inet_pton(AF_INET6, "::1", &addr6.sin6_addr); //0:0:0:0:0:0:0:1
+    
     // server는 ip주소를 줄 필요가 없다. -> 위의 memset으로 해결했지만 제대로 명시하기 위해 남겨둠 
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr6.sin6_addr.__in6_u.__u6_addr32[0] = htonl(INADDR_ANY);
@@ -20,12 +18,10 @@ TcpServer::TcpServer(void) {
     addr6.sin6_port = htons(12345);
 }
 
-TcpServer::TcpServer(char *ip, char *port)/* : ipv4(ip)*/{
+TcpServer::TcpServer(char *port) {
     memset(&addr, 0 ,sizeof(addr));
     
     addr.sin_family = AF_INET;
-    // this->ip=ip;
-    inet_pton(AF_INET, ip, &addr.sin_addr);
     int port_ = std::stoi(port);
     addr.sin_port = htons(port_);
 }
