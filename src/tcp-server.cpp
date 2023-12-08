@@ -26,9 +26,9 @@ TcpServer::TcpServer(char *port) {
     addr.sin_port = htons(port_);
 }
 
-TcpServer::~TcpServer(void) {
-    close(listen_sock_);
-}
+// TcpServer::~TcpServer(void) {
+//     close(listen_sock_);
+// }
 
 int TcpServer::run(void) {
     listen_sock_ = socket(addr.sin_family, SOCK_STREAM, 0);

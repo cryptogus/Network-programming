@@ -38,7 +38,7 @@ public:
     // ipv4
     // TcpServer(char *ip = "127.0.0.1", char *port = "12345");
     TcpServer(char *port);
-    ~TcpServer();
+    // ~TcpServer();
     
     // server 실행
     int run(void);
