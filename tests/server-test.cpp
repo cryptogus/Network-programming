@@ -1,18 +1,16 @@
 #include <iostream>
 #include "tcp-server.h"
 
-void usage()
+int main(void)
 {
-    printf("syntax: server-test <ip version> <protocol>\n");
-    printf("sample: server-test ipv4 TCP\n");
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc != 3) {
-        usage();
-        return 0;
+    TcpServer server;
+    if (server.Setaddr())
+        std::cout << "server setting complete\n";
+    else
+        return 1;
+    if (server.run() == -1) {
+        return 2;
     }
-    TcpServer server(argv[1], argv[2]);
-    server.run();
+    return 0;
+
 }
