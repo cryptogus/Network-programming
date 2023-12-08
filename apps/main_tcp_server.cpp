@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
         usage();
         return 0;
     }
-    TcpServer server(argv[2]);
+    TcpServer server(argv[1]);
     if (server.Setaddr())
         std::cout << "server setting complete\n";
     else
