@@ -21,10 +21,15 @@ private:
     sockaddr_in addr;
     //ipv6
     sockaddr_in6 addr6;
+    // socket
+    int sock_;
 
+    char buf[BUFSIZ + 1];
 public:
     TcpClient(void);
     TcpClient(char *ip, char *port);
+
+    int run(void);
 
     void PtonResult(void);
     void NtopResult(void);
