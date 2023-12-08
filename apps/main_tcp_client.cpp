@@ -1,9 +1,21 @@
 #include <iostream>
 #include "tcp-client.h"
 
-int main(void) {
+void usage()
+{
+    printf("syntax: client-test <ipv4> <port>\n");
+    printf("sample: client-test 10.1.1.3 12341\n");
+}
 
-    TcpClient client;
+int main(int argc, char *argv[])
+{
+    if (argc != 3) {
+        usage();
+        return 0;
+    }
+    
+    TcpClient client(argv[1], argv[2]);
+
     printf("=====Test n to p=====\n");
     client.NtopResult();
     printf("\n=====Test p to n=====\n");
@@ -16,5 +28,4 @@ int main(void) {
     if (client.run() == -1) {
         return 2;
     }
-    return 0;
 }

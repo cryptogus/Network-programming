@@ -3,16 +3,23 @@
 
 void usage()
 {
-    printf("syntax: server-test <ip version> <protocol>\n");
-    printf("sample: server-test ipv4 TCP\n");
+    printf("syntax: server-test <port>\n");
+    printf("sample: server-test 12341\n");
 }
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3) {
+    if (argc != 2) {
         usage();
         return 0;
     }
-    TcpServer server(argv[1], argv[2]);
-    server.run();
+    TcpServer server(argv[2]);
+    if (server.Setaddr())
+        std::cout << "server setting complete\n";
+    else
+        return 1;
+    if (server.run() == -1) {
+        return 2;
+    }
+    return 0;
 }

@@ -67,7 +67,7 @@ listen 함수호출을 통해서 "연결 요청 대기상태"
 accept: 클라이언트 접속 요청 수락 함수
 */
     while(true) {
-        socklen_t addrlen = 0;
+        socklen_t addrlen = sizeof(client_addr);
         client_sock_ = accept(listen_sock_, (struct sockaddr *)&client_addr, &addrlen);
         if (client_sock_ == -1) {
             fprintf(stderr, "accept error\n");
@@ -75,6 +75,8 @@ accept: 클라이언트 접속 요청 수락 함수
         }
 
         // 접속한 client 정보
+        printf("%d\n",client_addr.sin_family);
+        printf("%d\n",client_addr.sin_addr.s_addr);
         inet_ntop(AF_INET, &client_addr.sin_addr, ipv4, sizeof(ipv4));
         printf("\n[TCP 서버] client 정보: IP: %s, Port:%d\n", ipv4, ntohs(client_addr.sin_port));
 
@@ -102,7 +104,7 @@ accept: 클라이언트 접속 요청 수락 함수
         close(client_sock_);
     }
     close(listen_sock_);
-
+    return 0;
 }
 // only ipv4
 bool TcpServer::Setaddr(void) const {

@@ -80,8 +80,7 @@ int TcpClient::run(void) {
     }
 
     close(sock_);
-
-
+    return 0;
 }
 void TcpClient::PtonResult(void) {
 	printf("(IP) presentation to numberic\n");
