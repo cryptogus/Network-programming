@@ -18,10 +18,17 @@ class TcpClient {
 
 private:
     //ipv4
-    sockaddr_in clientaddr;
+    sockaddr_in addr;
     //ipv6
-    sockaddr_in6 clientaddr6;
+    sockaddr_in6 addr6;
 
 public:
     TcpClient(void);
+    TcpClient(char *ip, char *port);
+
+    void PtonResult(void);
+    void NtopResult(void);
+    // check value
+    bool Setaddr (void) const;
+    bool Setaddr6 (void) const;
 };
