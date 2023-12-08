@@ -43,8 +43,6 @@ public:
     // server 실행
     int run(void);
 
-    void PtonResult(void);
-    void NtopResult(void);
     // check value
     bool Setaddr (void) const;
     bool Setaddr6 (void) const;
