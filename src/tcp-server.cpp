@@ -9,10 +9,13 @@ TcpServer::TcpServer(void) {
     
     // server는 ip주소를 줄 필요가 없다. -> 위의 memset으로 해결했지만 제대로 명시하기 위해 남겨둠 
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr6.sin6_addr = in6addr_any;
+    /*
     addr6.sin6_addr.__in6_u.__u6_addr32[0] = htonl(INADDR_ANY);
     addr6.sin6_addr.__in6_u.__u6_addr32[1] = htonl(INADDR_ANY);
     addr6.sin6_addr.__in6_u.__u6_addr32[2] = htonl(INADDR_ANY);
     addr6.sin6_addr.__in6_u.__u6_addr32[3] = htonl(INADDR_ANY);
+    */
     // port는 12345로 고정한다.
     addr.sin_port = htons(12345);
     addr6.sin6_port = htons(12345);
