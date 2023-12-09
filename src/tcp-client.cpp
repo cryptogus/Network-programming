@@ -39,22 +39,22 @@ TcpClient::TcpClient(char *ip, char *port) {
 
         // 결과에서 IP 주소 출력, ipv6 미완
         for (p = result; p != NULL; p = p->ai_next) {
-            void *addr;
+            // 1. void *addr;
 
             if (p->ai_family == AF_INET) {
                 struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
-                // addr = &(ipv4->sin_addr);
+                // 2. addr = &(ipv4->sin_addr);
                 this->addr.sin_addr = ipv4->sin_addr;
             } else {
                 struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)p->ai_addr;
-                // addr = &(ipv6->sin6_addr);
+                // 3. addr = &(ipv6->sin6_addr);
                 this->addr6.sin6_addr = ipv6->sin6_addr;
             }
 
             // IP 주소를 텍스트로 변환하여 출력
-            // char ipstr[INET6_ADDRSTRLEN];
-            // inet_ntop(p->ai_family, addr, ipstr, sizeof(ipstr));
-            // printf("IP Address: %s\n", ipstr);
+            // 4. char ipstr[INET6_ADDRSTRLEN];
+            // 5. inet_ntop(p->ai_family, addr, ipstr, sizeof(ipstr));
+            // 6. printf("IP Address: %s\n", ipstr);
             
         }
 
