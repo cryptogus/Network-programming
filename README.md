@@ -15,3 +15,16 @@ application gateway 통해서 포워딩하는거지
 reference  
 https://namu.wiki/w/NAT  
 https://kibbomi.tistory.com/219  
+
+## Build
+``` bash
+$ sudo apt update && sudo apt upgrade
+$ sudo apt install g++ build-essential cmake ninja-build
+```
+```bash
+$ cmake -B build -S .
+```
+### Check ESTABLISHED(connected port) or LISTENING(connectivity standby port) Port Commands
+```bash
+$ netstat -a -n --tcp
+```
