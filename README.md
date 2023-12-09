@@ -22,7 +22,8 @@ $ sudo apt update && sudo apt upgrade
 $ sudo apt install g++ build-essential cmake ninja-build
 ```
 ```bash
-$ cmake -B build -S .
+$ cmake -B build -S . -GNinja
+$ cd build && ninja
 ```
 ### Check ESTABLISHED(connected port) or LISTENING(connectivity standby port) Port Commands
 ```bash
