@@ -36,6 +36,9 @@ int TcpClient::run(void) {
     retval = connect(sock_, (struct sockaddr *)&addr, sizeof(addr));
     if (retval == -1) {
         fprintf(stderr, "Connection fail\n");
+        // errno.h
+        char *errormsg = strerror(errno);
+        printf("error message using errno.h: %s\n", errormsg);
         return -1;
     }
 
