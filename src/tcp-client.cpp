@@ -21,7 +21,54 @@ TcpClient::TcpClient(char *ip, char *port) {
     
     addr.sin_family = AF_INET;
     // this->ip=ip;
-    inet_pton(AF_INET, ip, &addr.sin_addr);
+    if (inet_pton(AF_INET, ip, &addr.sin_addr) != 1) {
+        // printf("%s\n", strerror(errno));
+        // DNS -> ipv4 변환
+        struct addrinfo hints, *result, *p;
+        int status;
+
+        // 힌트 초기화
+        memset(&hints, 0, sizeof hints);
+        hints.ai_family = AF_UNSPEC;  // IPv4 또는 IPv6 모두 허용
+        hints.ai_socktype = SOCK_STREAM;  // 소켓 유형 (스트림 소켓)
+
+        // 주소 정보 얻기
+        if ((status = getaddrinfo(ip, NULL, &hints, &result)) != 0) {
+            fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
+        }
+
+        // 결과에서 IP 주소 출력, ipv6 미완
+        for (p = result; p != NULL; p = p->ai_next) {
+            void *addr;
+
+            if (p->ai_family == AF_INET) {
+                struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+                // addr = &(ipv4->sin_addr);
+                this->addr.sin_addr = ipv4->sin_addr;
+            } else {
+                struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)p->ai_addr;
+                // addr = &(ipv6->sin6_addr);
+                this->addr6.sin6_addr = ipv6->sin6_addr;
+            }
+
+            // IP 주소를 텍스트로 변환하여 출력
+            // char ipstr[INET6_ADDRSTRLEN];
+            // inet_ntop(p->ai_family, addr, ipstr, sizeof(ipstr));
+            // printf("IP Address: %s\n", ipstr);
+            
+        }
+
+        freeaddrinfo(result);  // 결과 해제
+
+        //netent *ptr = getnetbyname(ip);
+        
+        // hostent *ptr = gethostbyaddr();
+        // if (ptr->h_addrtype != AF_INET)
+        // if (ptr == NULL) {
+        //     printf("1111\n");
+        // }
+        // memcpy(&addr.sin_addr.s_addr, &ptr->n_net, sizeof(ptr->n_net));
+    }
     int port_ = std::stoi(port);
     addr.sin_port = htons(port_);
 }

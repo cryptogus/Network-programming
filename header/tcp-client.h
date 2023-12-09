@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 #endif
 
