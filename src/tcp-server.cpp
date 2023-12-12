@@ -33,6 +33,31 @@ TcpServer::TcpServer(char *port) {
 //     close(listen_sock_);
 // }
 
+void TcpServer::thread_sock(int &client_sock) {
+    // addrlen = sizeof(client_addr)
+    // getpeername(client_sock, (struct sockaddr *)&client_addr, &addrlen);
+    while (true) {
+        int retval = recv(client_sock, buf, BUFSIZ, 0); 
+        if (retval == -1) {
+            fprintf(stderr, "recv fail\n");
+            break;
+        }else if (retval == 0) {
+            // 입력이 아무것도 없을 때
+            break;
+        }
+        // 받은 데이터 출력
+        buf[retval + 1] = '\0';
+        printf("\n[TCP %s:%d] %s\n",ipv4, ntohs(client_addr.sin_port), buf);
+        // send -> 데이터 보내기, client가 보낸만큼 다시 보내 줄 것
+        retval = send(client_sock, buf, retval, 0);
+        if (retval == -1) {
+            fprintf(stderr, "send error\n");
+            break;
+        }
+    }
+    close(client_sock);
+}
+
 int TcpServer::run(void) {
     listen_sock_ = socket(addr.sin_family, SOCK_STREAM, 0);
     if (listen_sock_ == -1) {
@@ -82,29 +107,13 @@ accept: 클라이언트 접속 요청 수락 함수
         printf("%d\n",client_addr.sin_addr.s_addr);
         inet_ntop(AF_INET, &client_addr.sin_addr, ipv4, sizeof(ipv4));
         printf("\n[TCP 서버] client 정보: IP: %s, Port:%d\n", ipv4, ntohs(client_addr.sin_port));
-
-        while (true) {
-            int retval = recv(client_sock_, buf, BUFSIZ, 0); 
-            if (retval == -1) {
-                fprintf(stderr, "recv fail\n");
-                break;
-            }else if (retval == 0) {
-                // 입력이 아무것도 없을 때
-                break;
-            }
-
-            // 받은 데이터 출력
-            buf[retval + 1] = '\0';
-            printf("\n[TCP %s:%d] %s\n",ipv4, ntohs(client_addr.sin_port), buf);
-
-            // send -> 데이터 보내기, client가 보낸만큼 다시 보내 줄 것
-            retval = send(client_sock_, buf, retval, 0);
-            if (retval == -1) {
-                fprintf(stderr, "send error\n");
-                break;
-            }
-        }
-        close(client_sock_);
+        
+        // class 내부 함수에서 정의한 함수를 다른 class 내부 함수에서 쓰려면
+        // &TcpServer::thread_sock으로 사용하고 두번째 인자로 참조하려는 클래스 변수명을 넣어줘야함 지금은 this
+        std::thread t(&TcpServer::thread_sock, this, std::ref(client_sock_));
+        // join으로 하면 안되고 detach로 해야 동시에 처리된다..! detach를 사용하면 스레드가 백그라운드에서 독립적으로 실행되므로 메인 스레드는 계속해서 다른 작업을 수행할 수 있습니다. 이는 네트워크 프로그래밍에서 여러 클라이언트의 동시 접속 또는 비동기 작업을 처리하는 데 유용합니다.
+        t.detach();
+        
     }
     close(listen_sock_);
     return 0;

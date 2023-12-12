@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <cstring>
+#include <thread>
 
 #ifdef __linux__
 #include <errno.h>
@@ -32,6 +33,9 @@ private:
     int client_sock_;
     // buffer -> client가 입력한 값을 받아오는 buffer
     char buf[BUFSIZ + 1];
+
+    // multy thread
+    std::thread* acceptThread_{nullptr};
 public:
     // 생성자(루프백으로 초기화, port 12345)
     TcpServer();
@@ -42,7 +46,8 @@ public:
     
     // server 실행
     int run(void);
-
+    // multy thread 생성
+    void thread_sock(int &client_sock);
     // check value
     bool Setaddr (void) const;
     bool Setaddr6 (void) const;
