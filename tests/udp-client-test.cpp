@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 3) {
         usage();
+        return 1;
     }
     
     UDP_client client(argv[1], argv[2]);
