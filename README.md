@@ -29,3 +29,5 @@ $ cd build && ninja
 ```bash
 $ netstat -a -n --tcp
 ```
+
+## udp를 이용한 vpn (update 예정, wireguard 참고)
