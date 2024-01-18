@@ -1,3 +1,5 @@
 include_directories(../header/)
-add_executable(tcp_server_test ../src/tcp-server.cpp server-test.cpp)
-add_executable(tcp_client_test ../src/tcp-client.cpp client-test.cpp)
+add_executable(tcp_server_test ../src/tcp-server.cpp tcp-server-test.cpp)
+add_executable(tcp_client_test ../src/tcp-client.cpp tcp-client-test.cpp)
+add_executable(udp_server_test ../src/udp_server.cpp udp-server-test.cpp)
+add_executable(udp_client_test ../src/udp-client.cpp udp-client-test.cpp)
