@@ -44,5 +44,5 @@ $ sudo ./tun_device_test
 $ sudo ip addr add 10.0.0.1/24 dev tun0
 $ sudo ip link set tun0 up
 $ ping 10.0.0.1
-$ ifconfig tun0
+$ ifconfig tun0 (or ip addr show tun0)
 ``````
