@@ -19,7 +19,7 @@ https://kibbomi.tistory.com/219
 ## Build
 ``` bash
 $ sudo apt update && sudo apt upgrade
-$ sudo apt install g++ build-essential cmake ninja-build
+$ sudo apt install g++ build-essential cmake ninja-build libssl-dev
 ```
 ```bash
 $ cmake -B build -S . -GNinja
@@ -29,3 +29,5 @@ $ cd build && ninja
 ```bash
 $ netstat -a -n --tcp
 ```
+
+## udp를 이용한 vpn (update 예정, wireguard 참고)
