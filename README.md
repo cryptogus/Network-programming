@@ -1,4 +1,13 @@
 # security-networking
+```
+CPU:
+  Info: quad core model: 11th Gen Intel Core i7-1165G7 bits: 64 type: MT MCP
+    cache: L2: 5 MiB
+  Speed (MHz): avg: 2803 min/max: N/A cores: 1: 2803 2: 2803 3: 2803
+    4: 2803 5: 2803 6: 2803 7: 2803 8: 2803
+Kernel: 5.15.133.1-microsoft-standard-WSL2 x86_64 Up: 0m
+```
+<!--
 tls, ipsec, vpn for windows and linux  
 https://blog.naver.com/love_tolty/222650880413
 
@@ -15,7 +24,7 @@ application gateway 통해서 포워딩하는거지
 reference  
 https://namu.wiki/w/NAT  
 https://kibbomi.tistory.com/219  
-
+-->
 ## Build
 ``` bash
 $ sudo apt update && sudo apt upgrade
