@@ -40,3 +40,4 @@ $ netstat -a -n --tcp
 ```
 
 ## udp를 이용한 vpn (update 예정, wireguard 참고)
+패킷 전달 과정 설명 잘 되어있음: https://aws-hyoh.tistory.com/169
