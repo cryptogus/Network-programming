@@ -8,7 +8,7 @@
 #include "udp_client.h"
 class Tun_Interface : public UDP_client{
 public:
-    Tun_Interface(char *ip, char *port) : UDP_client(ip, port){};
+    Tun_Interface(char *SERVER_PUBLIC_IP, char *SERVER_PORT) : UDP_client(SERVER_PUBLIC_IP, SERVER_PORT){};
     int tun_fd, udp_fd;
     void flags(void);
     int run(void) override final;
