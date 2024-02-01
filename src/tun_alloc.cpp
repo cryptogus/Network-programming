@@ -35,7 +35,7 @@ void ifconfig() {
 #ifdef AS_CLIENT
   snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.2/16 mtu %d up", MTU);
 #else
-  snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.1/16 mtu %d up", MTU);
+  snprintf(cmd, sizeof(cmd), "ifconfig tun1 10.8.0.1/16 mtu %d up", MTU);
 #endif
   system(cmd);
 }
@@ -59,9 +59,9 @@ void setup_route_table(char *SERVER_HOST, char *LAN_network_device) {
   
   char cmd[1024];
   char cmd2[1024];
-  snprintf(cmd, sizeof(cmd), "iptables -A FORWARD -i tun0 -o %s -j ACCEPT", LAN_network_device);
+  snprintf(cmd, sizeof(cmd), "iptables -A FORWARD -i tun1 -o %s -j ACCEPT", LAN_network_device);
   system(cmd);
-  snprintf(cmd2, sizeof(cmd2), "iptables -A FORWARD -i %s -o tun0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
+  snprintf(cmd2, sizeof(cmd2), "iptables -A FORWARD -i %s -o tun1 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
   system(cmd2);
   
 #endif
@@ -70,7 +70,7 @@ void setup_route_table(char *SERVER_HOST, char *LAN_network_device) {
 /*
  * Cleanup route table
  */
-void cleanup_route_table() {
+void cleanup_route_table(char *SERVER_HOST, char *LAN_network_device) {
 #ifdef AS_CLIENT
   //system("iptables -t nat -D POSTROUTING -o tun0 -j MASQUERADE");
   system("iptables -D FORWARD -i tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT");
@@ -81,10 +81,12 @@ void cleanup_route_table() {
   system("ip route del 0/1");
   system("ip route del 128/1");
 #else
-  system("iptables -D FORWARD -i tun0 -o br-lan -j ACCEPT");
   char cmd[1024];
-  snprintf(cmd, sizeof(cmd), "iptables -A FORWARD -i %s -o tun0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
-  system("cmd");
+  char cmd2[1024];
+  snprintf(cmd, sizeof(cmd), "iptables -D FORWARD -i tun1 -o %s -j ACCEPT", LAN_network_device);
+  system(cmd);
+  snprintf(cmd2, sizeof(cmd2), "iptables -D FORWARD -i %s -o tun1 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
+  system(cmd2);
 #endif
 }
 /*
