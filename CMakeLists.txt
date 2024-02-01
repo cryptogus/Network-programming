@@ -19,7 +19,7 @@ add_executable(tcp-client ${TCP_CLIENT} apps/main_tcp_client.cpp)
 target_compile_options(tcp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
 
 add_executable(udp-server ${UDP_SERVER} apps/main-udp-server.cpp)
-target_compile_options(tcp-server PRIVATE -Wall -Wextra -pthread) # -g) 디버깅 옵션 주석처리
+target_compile_options(tcp-server PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
 
 add_executable(udp-client ${UDP_CLIENT} apps/main-udp-client.cpp)
 target_compile_options(tcp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리

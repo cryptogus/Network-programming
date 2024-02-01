@@ -1,3 +1,4 @@
+#include "tun_alloc.h"
 #include "tun_interface.h"
 /*
  * For a real-world VPN, traffic inside UDP tunnel is encrypted

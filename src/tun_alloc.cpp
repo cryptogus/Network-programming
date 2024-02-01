@@ -1,5 +1,7 @@
 #include "tun_alloc.h"
 
+extern char *SERVER_HOST;
+extern char *LAN_network_device;
 /*
  * Create VPN interface /dev/tun0 and return a fd
  */
@@ -43,7 +45,7 @@ void ifconfig() {
 /*
  * Setup route table via `iptables` & `ip route`
  */
-void setup_route_table(char *SERVER_HOST, char *LAN_network_device) {
+void setup_route_table() {
   system("sysctl -w net.ipv4.ip_forward=1");
 
 #ifdef AS_CLIENT
@@ -70,7 +72,7 @@ void setup_route_table(char *SERVER_HOST, char *LAN_network_device) {
 /*
  * Cleanup route table
  */
-void cleanup_route_table(char *SERVER_HOST, char *LAN_network_device) {
+void cleanup_route_table() {
 #ifdef AS_CLIENT
   //system("iptables -t nat -D POSTROUTING -o tun0 -j MASQUERADE");
   system("iptables -D FORWARD -i tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT");

@@ -23,8 +23,8 @@ int tun_alloc(void);
  */
 void ifconfig(void);
 
-void setup_route_table(char *SERVER_HOST, char *LAN_network_device);
-void cleanup_route_table(char *SERVER_HOST, char *LAN_network_device);
+void setup_route_table(void);
+void cleanup_route_table(void);
 
 void cleanup_when_sig_exit(void);
 #endif

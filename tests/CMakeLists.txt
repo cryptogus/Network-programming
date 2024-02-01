@@ -4,3 +4,7 @@ add_executable(tcp_client_test ../src/tcp-client.cpp tcp-client-test.cpp)
 add_executable(udp_server_test ../src/udp_server.cpp udp-server-test.cpp)
 add_executable(udp_client_test ../src/udp_client.cpp udp-client-test.cpp)
 add_executable(tun_device_test tun_device_test.cpp)
+
+add_executable(tun_client_test ../src/tun_interface.cpp ../src/tun_alloc.cpp ../src/udp_client.cpp ../src/lea.cpp tun-client-test.cpp)
+target_compile_options(tun_client_test PRIVATE -DAS_CLIENT)
+add_executable(tun_server_test ../src/tun_interface.cpp ../src/tun_alloc.cpp ../src/udp_server.cpp ../src/lea.cpp tun-server-test.cpp)
