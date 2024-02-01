@@ -8,7 +8,7 @@
 #include "udp_client.h"
 class Tun_Interface : public UDP_client{
 public:
-    Tun_Interface(char *SERVER_PUBLIC_IP, char *SERVER_PORT) : UDP_client(SERVER_PUBLIC_IP, SERVER_PORT){};
+    Tun_Interface(char *VPN_SERVER_PUBLIC_IP, char *VPN_SERVER_PORT) : UDP_client(VPN_SERVER_PUBLIC_IP, VPN_SERVER_PORT){};
     int tun_fd, udp_fd;
     void flags(void);
     int run(void) override final;
@@ -18,7 +18,7 @@ public:
 class Tun_Interface : public UDP_server{
 
 public:
-    Tun_Interface(char *port) : UDP_server(port){};
+    Tun_Interface(char *VPN_SERVER_PORT) : UDP_server(VPN_SERVER_PORT){};
     int tun_fd, udp_fd;
     void flags(void);
     int run(void) override final;
