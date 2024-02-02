@@ -74,9 +74,10 @@ The source ip address comes up as the ip assigned to tun0 (it should come up as 
 Wireshark capture of a VPN (By tun interface) sending packets through tunneling to the other side's VPN. Note that no encryption is used here for testing purposes.  
 For now, for the sake of generality, we've set the public IP of the server to 122.211.166.156 for testing.
 
-https://www.gl-inet.com/products/
+https://www.gl-inet.com/products/  
 If you can, I'd recommend buying two devices, one with LAN and one with WAN ports, and testing them.  
 The device probably has a device name of br-lan for the LAN port and eth0 for the WAN port. A tun device is added in between.  
+Note that the encryption and decryption uses a fixed-value key with no key exchange and uses the block cipher LEA-256.
 # Raw Socket과 TUN/TAP Device의 공통점과 차이점
 
 ### 공통점:

@@ -37,7 +37,7 @@ void ifconfig() {
 #ifdef AS_CLIENT
   snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.2 netmask 255.255.0.0 mtu %d up", MTU);
 #else
-  snprintf(cmd, sizeof(cmd), "ifconfig tun1 10.8.0.1 netmask 255.255.0.0 mtu %d up", MTU);
+  snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.1 netmask 255.255.0.0 mtu %d up", MTU);
 #endif
   system(cmd);
 }
@@ -61,9 +61,9 @@ void setup_route_table() {
   
   char cmd[1024];
   char cmd2[1024];
-  snprintf(cmd, sizeof(cmd), "iptables -A FORWARD -i tun1 -o %s -j ACCEPT", LAN_network_device);
+  snprintf(cmd, sizeof(cmd), "iptables -A FORWARD -i tun0 -o %s -j ACCEPT", LAN_network_device);
   system(cmd);
-  snprintf(cmd2, sizeof(cmd2), "iptables -A FORWARD -i %s -o tun1 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
+  snprintf(cmd2, sizeof(cmd2), "iptables -A FORWARD -i %s -o tun0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
   system(cmd2);
   
 #endif
@@ -85,9 +85,9 @@ void cleanup_route_table() {
 #else
   char cmd[1024];
   char cmd2[1024];
-  snprintf(cmd, sizeof(cmd), "iptables -D FORWARD -i tun1 -o %s -j ACCEPT", LAN_network_device);
+  snprintf(cmd, sizeof(cmd), "iptables -D FORWARD -i tun0 -o %s -j ACCEPT", LAN_network_device);
   system(cmd);
-  snprintf(cmd2, sizeof(cmd2), "iptables -D FORWARD -i %s -o tun1 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
+  snprintf(cmd2, sizeof(cmd2), "iptables -D FORWARD -i %s -o tun0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT", LAN_network_device);
   system(cmd2);
 #endif
 }

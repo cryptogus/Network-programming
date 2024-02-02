@@ -6,6 +6,7 @@ set(TCP_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/tcp-server.cpp)
 set(TCP_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/tcp-client.cpp)
 set(UDP_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/udp_server.cpp)
 set(UDP_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/udp_client.cpp)
+set(TUN ${CMAKE_CURRENT_LIST_DIR}/src/lea.cpp ${CMAKE_CURRENT_LIST_DIR}/src/tun_alloc.cpp ${CMAKE_CURRENT_LIST_DIR}/src/tun_interface.cpp)
 
 # add_subdirectory(src) -> library 만들까?
 add_subdirectory(tests)
@@ -19,7 +20,13 @@ add_executable(tcp-client ${TCP_CLIENT} apps/main_tcp_client.cpp)
 target_compile_options(tcp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
 
 add_executable(udp-server ${UDP_SERVER} apps/main-udp-server.cpp)
-target_compile_options(tcp-server PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
+target_compile_options(udp-server PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
 
 add_executable(udp-client ${UDP_CLIENT} apps/main-udp-client.cpp)
-target_compile_options(tcp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
+target_compile_options(udp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
+
+add_executable(vpn-server ${UDP_SERVER} ${TUN} apps/main-vpn-server.cpp)
+target_compile_options(vpn-server PRIVATE -Wall -Wextra)
+
+add_executable(vpn-client ${UDP_CLIENT} ${TUN} apps/main-vpn-client.cpp)
+target_compile_options(vpn-client PRIVATE -Wall -Wextra -DAS_CLIENT)
