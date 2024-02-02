@@ -54,7 +54,29 @@ Raw 소켓은 일반적으로 특권이 필요한 작업이며, 운영 체제에
 
 ## udp + tun device를 이용한 vpn (update 예정, wireguard 참고)
 패킷 전달 과정 설명 잘 되어있음: https://aws-hyoh.tistory.com/169
+### tunneling test
+After build, local test  
+![image](https://github.com/cryptogus/Network-programming/assets/60291830/6788678a-e339-4052-8ec8-38be0329b4e3)
+We only tested clients because this is a WSL2 environment with a single eth0 network device and no gateways or other equipment.  
+```bash
+$ cd tests
+$ ./udp_client_test 192.168.10.3 12340
+# another terminal
+$ sudo ./tun_client_test
+```
+![스크린샷 2024-02-02 220244](https://github.com/cryptogus/Network-programming/assets/60291830/6140408b-0796-41f1-9aaa-e7dc1b3548db)
 
+In Wireshark, a packet with the other party's private IP, port 192.168.10.3:12340, as the destination  
+The source ip address comes up as the ip assigned to tun0 (it should come up as eth0's ip), which is what happens because we're testing on one machine, and the iptables command in tun_alloc.cpp that changes the source ip is currently commented out.
+
+![스크린샷 2024-02-02 220323](https://github.com/cryptogus/Network-programming/assets/60291830/686faced-4d6c-49e6-b967-08f2810b2b80)
+
+Wireshark capture of a VPN (By tun interface) sending packets through tunneling to the other side's VPN. Note that no encryption is used here for testing purposes.  
+For now, for the sake of generality, we've set the public IP of the server to 122.211.166.156 for testing.
+
+https://www.gl-inet.com/products/
+If you can, I'd recommend buying two devices, one with LAN and one with WAN ports, and testing them.  
+The device probably has a device name of br-lan for the LAN port and eth0 for the WAN port. A tun device is added in between.  
 # Raw Socket과 TUN/TAP Device의 공통점과 차이점
 
 ### 공통점:
