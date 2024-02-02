@@ -35,9 +35,9 @@ void ifconfig() {
   char cmd[1024];
 
 #ifdef AS_CLIENT
-  snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.2/16 mtu %d up", MTU);
+  snprintf(cmd, sizeof(cmd), "ifconfig tun0 10.8.0.2 netmask 255.255.0.0 mtu %d up", MTU);
 #else
-  snprintf(cmd, sizeof(cmd), "ifconfig tun1 10.8.0.1/16 mtu %d up", MTU);
+  snprintf(cmd, sizeof(cmd), "ifconfig tun1 10.8.0.1 netmask 255.255.0.0 mtu %d up", MTU);
 #endif
   system(cmd);
 }
