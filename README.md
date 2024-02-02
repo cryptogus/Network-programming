@@ -53,6 +53,8 @@ Raw 소켓은 일반적으로 특권이 필요한 작업이며, 운영 체제에
 설명 잘 나와 있음: https://mangkyu.tistory.com/16
 
 ## udp + tun device를 이용한 vpn (update 예정, wireguard 참고)
+[tun이란?](tests/tun.md)
+
 패킷 전달 과정 설명 잘 되어있음: https://aws-hyoh.tistory.com/169
 ### tunneling test
 After build, local test  
