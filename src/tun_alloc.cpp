@@ -27,6 +27,39 @@ int tun_alloc() {
 
   return fd;
 }
+/****
+ * If you run the server and client together, you'll crash the tun device.
+ * You should use this comment function and replace some tun0s with tun1s in other functions.
+ * 
+
+int tun_alloc() {
+  struct ifreq ifr;
+  int fd, e;
+
+  if ((fd = open("/dev/net/tun", O_RDWR)) < 0) {
+    perror("Cannot open /dev/net/tun");
+    return fd;
+  }
+
+  memset(&ifr, 0, sizeof(ifr));
+
+  ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+#ifdef AS_CLIENT
+  strncpy(ifr.ifr_name, "tun1", IFNAMSIZ);
+#else
+  strncpy(ifr.ifr_name, "tun0", IFNAMSIZ);
+#endif
+  if ((e = ioctl(fd, TUNSETIFF, (void *) &ifr)) < 0) {
+    perror("ioctl[TUNSETIFF]");
+    close(fd);
+    return e;
+  }
+
+  return fd;
+}
+
+*/
+
 
 /*
  * Configure IP address and MTU of VPN interface /dev/tun0
