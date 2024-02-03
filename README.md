@@ -31,8 +31,11 @@ https://kibbomi.tistory.com/219
 $ sudo apt update && sudo apt upgrade
 $ sudo apt install g++ build-essential cmake ninja-build libssl-dev
 ```
+OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSSL=OFF.
+OpenSSL is only used in the TLS protocol sample source files.
 ```bash
 $ cmake -B build -S . -GNinja
+# $ cmake -B build -S . -GNinja -DUSE_OPENSSL=OFF
 $ cd build && ninja
 ```
 ### Check ESTABLISHED(connected port) or LISTENING(connectivity standby port) Port Commands
