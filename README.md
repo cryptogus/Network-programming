@@ -1,4 +1,5 @@
-# security-networking
+# Socket programming
+Protocols: TCP, UDP, Tunneling, TLS with OpenSSL  
 ```
 CPU:
   Info: quad core model: 11th Gen Intel Core i7-1165G7 bits: 64 type: MT MCP
