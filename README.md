@@ -89,12 +89,12 @@ Note that the encryption and decryption uses a fixed-value key with no key excha
 **VPN client & server TEST**
 ![image](https://github.com/cryptogus/Network-programming/assets/60291830/a810c50d-3042-4b62-816c-56e13b8f41fe)
 
-Run vpn server on the embedded device with the listening port 12345 and LAN device as arguments. In the vpn client, we passed the server's listening port and public IP as arguments.
+Run vpn server on the embedded device with the listening port 12345 and LAN interface as arguments. In the vpn client, we passed the server's listening port and public IP as arguments.
 
 The image above was captured using `tcpdump` after running the vpn server in the background.  
 ```bash
 $ sudo apt install tcpdump
-$ tcpdump -i <WAN port device> -X -v
+$ tcpdump -i <WAN interface> -X -v
 ```
 # Raw Socket과 TUN/TAP Device의 공통점과 차이점
 
