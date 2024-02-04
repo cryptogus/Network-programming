@@ -85,6 +85,8 @@ If you can, I'd recommend buying two devices, one with LAN and one with WAN port
 The device probably has a device name of br-lan for the LAN port and eth0 for the WAN port. A tun device is added in between.  
 Note that the encryption and decryption uses a fixed-value key with no key exchange and uses the block cipher LEA-256.
 
+---
+**VPN client & server TEST**
 ![image](https://github.com/cryptogus/Network-programming/assets/60291830/a810c50d-3042-4b62-816c-56e13b8f41fe)
 
 Run vpn server on the embedded device with the listening port 12345 and LAN device as arguments. In the vpn client, we passed the server's listening port and public IP as arguments.
