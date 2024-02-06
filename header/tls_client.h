@@ -6,7 +6,7 @@ class TlsClient : public TcpClient{
 private:
     SSL_CTX *ctx_;
     SSL *ssl_;
-    int socket_;
+
     SSL *createSSLConnection(int socket);
 public:
     TlsClient(char *ip, char *port) : TcpClient(ip, port){
@@ -21,5 +21,6 @@ public:
             exit(EXIT_FAILURE);
         }
     }
+    int run(void) override final;
 
 };
