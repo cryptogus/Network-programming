@@ -17,7 +17,7 @@
 
 class TcpClient {
 
-private:
+protected:
     //ipv4
     sockaddr_in addr;
     //ipv6
@@ -30,7 +30,7 @@ public:
     TcpClient(void);
     TcpClient(char *ip, char *port);
 
-    int run(void);
+    virtual int run(void);
 
     void PtonResult(void);
     void NtopResult(void);

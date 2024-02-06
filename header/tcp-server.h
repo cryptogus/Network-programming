@@ -19,7 +19,7 @@
 
 class TcpServer {
 
-private:
+protected:
     // char *ip;
     // ipv4
     sockaddr_in addr;
