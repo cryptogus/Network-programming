@@ -7,6 +7,8 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 // g++ -o tls_server openssl-tls-server-sample.cpp -lssl -lcrypto
+// openssl req -x509 -nodes -days 365 -newkey rsa:3092 -keyout server.key -out server.crt
+
 #define SERVER_PORT 4433
 #define CERT_FILE "server.crt"
 #define KEY_FILE "server.key"

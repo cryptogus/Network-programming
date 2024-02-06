@@ -31,6 +31,22 @@ target_compile_options(vpn-server PRIVATE -Wall -Wextra)
 add_executable(vpn-client ${UDP_CLIENT} ${TUN} apps/main-vpn-client.cpp)
 target_compile_options(vpn-client PRIVATE -Wall -Wextra -DAS_CLIENT)
 
+# server.crt 파일 복사
+configure_file(
+    ${CMAKE_SOURCE_DIR}/server.crt
+    ${CMAKE_BINARY_DIR}/server.crt
+    COPYONLY
+)
+
+# server.key 파일 복사
+configure_file(
+    ${CMAKE_SOURCE_DIR}/server.key
+    ${CMAKE_BINARY_DIR}/server.key
+    COPYONLY
+)
+
+
+
 # 사용자 정의 옵션: USE_OPENSSL
 option(USE_OPENSSL "Use OpenSSL for TLS" ON)
 
