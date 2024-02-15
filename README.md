@@ -1,5 +1,9 @@
 # Socket programming
 Protocols: TCP, UDP, Tunneling, TLS with OpenSSL  
+
+## To do lists
+- key 교환 (또는 합의) 과정 넣기 → 양자내성암호로 넣을까? 
+- vpn header + 인증 패킷 추가.
 ```
 CPU:
   Info: quad core model: 11th Gen Intel Core i7-1165G7 bits: 64 type: MT MCP
@@ -141,3 +145,4 @@ $ tcpdump -i <WAN interface> -X -v
 - Raw Socket은 전송 계층에서 동작하며, 네트워크 스택을 완전히 우회할 수 있습니다.
 - TUN/TAP Device는 주로 네트워크 계층에서 동작하며, 주로 VPN 등 가상 네트워크 환경에서 사용됩니다.
 - Raw Socket은 특수한 용도로 사용되는 반면, TUN/TAP Device는 주로 VPN과 같은 응용 분야에서 활용됩니다.
+
