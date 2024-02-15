@@ -2,6 +2,7 @@
 Protocols: TCP, UDP, Tunneling, TLS with OpenSSL  
 
 ## To do lists
+- tls server c++ 구현
 - key 교환 (또는 합의) 과정 넣기 → 양자내성암호로 넣을까? 
 - vpn header + 인증 패킷 추가.
 ```
