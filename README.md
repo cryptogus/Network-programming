@@ -5,6 +5,7 @@ Protocols: TCP, UDP, Tunneling, TLS with OpenSSL
 - tls server c++ 구현
 - key 교환 (또는 합의) 과정 넣기 → 양자내성암호로 넣을까? 
 - vpn header + 인증 패킷 추가.
+- 에러시 프로그램 종료가 아닌 에러 로그를 따로 남기고 에러 부분을 다시 시작할 수 있도록 코드 구성하기
 ```
 CPU:
   Info: quad core model: 11th Gen Intel Core i7-1165G7 bits: 64 type: MT MCP
