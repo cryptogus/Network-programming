@@ -10,5 +10,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <syslog.h>
+// #include <syslog.h>
+#include <sys/stat.h> // mkdir func
+// #include <setjmp.h> // instead of goto
 
+void tcp_client(const char *ip, const char *port, const char *filepath);
+void tcp_server(const char *port, const char *filepath);
 #endif //__TCP_H

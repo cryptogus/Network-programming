@@ -54,7 +54,7 @@ int udp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, const ch
 }
 
 int udp_client(const char *ip, const char *port, const char *filepath) {
-    
+
     FILE *fp = fopen(filepath, "rb");
     if (!fp) {
         perror("Error opening file");
@@ -62,9 +62,9 @@ int udp_client(const char *ip, const char *port, const char *filepath) {
 
     struct sockaddr_storage client_addr;
     socklen_t client_addrlen = sizeof(client_addr);
-    
+
     int udp_sock = udp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
-    
+
     char buffer[BUFSIZ];
     size_t bytesRead;
 
@@ -83,7 +83,7 @@ int udp_client(const char *ip, const char *port, const char *filepath) {
     return 0;
 }
 
-int udp_server(const char *ip, const char *port, const char *filepath) {
+int udp_server(const char *port, const char *filepath) {
 
     FILE *fp = fopen(filepath, "wb");
     if (!fp) {
@@ -92,8 +92,8 @@ int udp_server(const char *ip, const char *port, const char *filepath) {
 
     struct sockaddr_storage client_addr;
     socklen_t client_addrlen = sizeof(client_addr);
-    
-    int udp_sock = udp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
+
+    int udp_sock = udp_bind((struct sockaddr *)&client_addr, &client_addrlen, NULL, port);
     char buffer[BUFSIZ];
 
      while (1) {
@@ -102,13 +102,13 @@ int udp_server(const char *ip, const char *port, const char *filepath) {
         printf("%ld\n", reval);
         if (reval < 0) {
             perror("Error receiving data");
-        } else if (reval == 0) {
-            break;  // Transmission complete
         }
+
         fwrite(buffer, 1, reval, fp);
         if (reval < sizeof(buffer))
-            break;
-    }
+            break; // Transmission complete, UDP 소켓에서는 recvfrom 함수가 0을 반환하는 경우는 없다.
+            //  UDP는 연결이 없는 프로토콜로, 개별 패킷 간의 상태를 유지하지 않음, 따라서 recvfrom 함수는 항상 적어도 하나의 바이트를 수신하거나, 에러가 발생할 때 -1을 반환
+    }       //  0을 반환하는 것은 TCP 소켓에서만 해당되는 상황
 
     fclose(fp);
     close(udp_sock);
