@@ -151,3 +151,34 @@ void tcp_server(const char *port, const char *filepath) {
 
     printf("File receive successfully.\n");
 }
+
+void http_request(const char *ip, const char *port, const char *message) {
+
+    struct sockaddr_storage client_addr;
+    socklen_t client_addrlen = sizeof(client_addr);
+
+    int http_sock = tcp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
+    if (connect(http_sock, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
+        perror("connect error");
+
+
+    if (send(http_sock, message, strlen(message), 0) < 0) {
+        perror("Error sending http request");
+    }
+
+    char buffer[BUFSIZ];
+    while(1) {
+        int retval = recv(http_sock, buffer, BUFSIZ, 0);
+        if (retval < 0) {
+            perror("Error recv http response");
+            break;
+        }
+        buffer[retval] = '\0';
+        fprintf(stdout, "%s",buffer);
+        if (strcmp("\r\n\r\n", &buffer[retval - 4]) == 0 ) // http respond의 끝 체크
+            break;
+        memset(buffer, 0, BUFSIZ);
+    }
+
+    close(http_sock);
+}
