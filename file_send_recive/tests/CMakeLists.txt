@@ -7,3 +7,8 @@ target_compile_definitions(udp-server-test PRIVATE UDPSERVER)
 add_executable(tcp-client-test ../src/tcp/tcp.c tcp-client-test.c)
 add_executable(tcp-server-test ../src/tcp/tcp.c tcp-server-test.c)
 target_compile_definitions(tcp-server-test PRIVATE TCPSERVER)
+
+# COPY test files to build directory
+file(COPY test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY 30mb_test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# file(COPY recieve DESTINATION ${CMAKE_CURRENT_BINARY_DIR}) directory copy, not used
