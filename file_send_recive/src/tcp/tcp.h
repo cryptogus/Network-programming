@@ -13,7 +13,15 @@
 // #include <syslog.h>
 #include <sys/stat.h> // mkdir func
 // #include <setjmp.h> // instead of goto
+#include <pthread.h>
 
 void tcp_client(const char *ip, const char *port, const char *filepath);
 void tcp_server(const char *port, const char *filepath);
+
+struct ThreadArgs {
+    int client_sock;
+    FILE *fp; // file pointer
+};
+
+void http_request(const char *ip, const char *port, const char *message);
 #endif //__TCP_H
