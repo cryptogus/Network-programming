@@ -53,7 +53,7 @@ int udp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, const ch
  return sock;
 }
 
-int udp_client(const char *ip, const char *port, const char *filepath) {
+void udp_client(const char *ip, const char *port, const char *filepath) {
 
     FILE *fp = fopen(filepath, "rb");
     if (!fp) {
@@ -79,11 +79,9 @@ int udp_client(const char *ip, const char *port, const char *filepath) {
     close(udp_sock);
 
     printf("File sent successfully.\n");
-
-    return 0;
 }
 
-int udp_server(const char *port, const char *filepath) {
+void udp_server(const char *port, const char *filepath) {
 
     FILE *fp = fopen(filepath, "wb");
     if (!fp) {
