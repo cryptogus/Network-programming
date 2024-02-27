@@ -1,8 +1,8 @@
 # TCP, UDP, HTTPS for testing
 
-Ubuntu 22.04 LTS
+On Ubuntu 22.04 LTS, use [libcurl](https://curl.se/libcurl/) for https requests
 ```bash
-$ sudo apt install build-essential cmake libssl-dev libcurl4-openssl-dev
+$ sudo apt install gcc build-essential cmake make libssl-dev libcurl4-openssl-dev gcc-arm-linux-gnueabihf
 $ curl-config --cflags
 $ curl-config --libs
 ```
@@ -15,6 +15,24 @@ $ cd tests
 ```
 tcp server port: 12340\
 udp server port: 12345
+
+## Build
+
+```bash
+$ cmake -B build -S . && cd build
+$ make
+```
+### cross compile for raspberry
+Make sure to cross-compile and link libcurl as well. Not implemented in cmake yet
+```bash
+$ cmake -B build -DCMAKE_TOOLCHAIN_FILE=toolchain_rasppi.cmake -S . && cd build
+$ make
+```
+### Test with qemu
+```bash
+$ sudo apt install qemu-user-static
+$ qemu-arm-static -L /usr/arm-linux-gnueabihf <실행 파일>
+```
 
 ## Source code explain
 tests/ 실행 파일들을 사용해서 wireshark(or tcpdump 등)을 이용하여 packet을 캡처해보면 이해가 더 쉽다.

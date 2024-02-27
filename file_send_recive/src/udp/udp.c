@@ -65,11 +65,11 @@ void udp_client(const char *ip, const char *port, const char *filepath) {
 
     int udp_sock = udp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
 
-    char buffer[BUFSIZ];
+    char buffer[BUFSIZ]; // BUFSIZ 만큼 데이터를 보냄
     size_t bytesRead;
 
     while((bytesRead = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
-        printf("%ld\n", bytesRead);
+        
          if (sendto(udp_sock, buffer, bytesRead, 0, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0) {
             perror("Error sending data");
         }
@@ -92,12 +92,12 @@ void udp_server(const char *port, const char *filepath) {
     socklen_t client_addrlen = sizeof(client_addr);
 
     int udp_sock = udp_bind((struct sockaddr *)&client_addr, &client_addrlen, NULL, port);
-    char buffer[BUFSIZ];
+    char buffer[BUFSIZ]; // BUFSIZ 만큼씩 데이터를 계속 받아옴
 
      while (1) {
         socklen_t client_len = sizeof(client_addr);
         ssize_t reval = recvfrom(udp_sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &client_len);
-        printf("%ld\n", reval);
+        
         if (reval < 0) {
             perror("Error receiving data");
         }
@@ -110,4 +110,6 @@ void udp_server(const char *port, const char *filepath) {
 
     fclose(fp);
     close(udp_sock);
+
+    printf("File recieve successfully.\n");
 }

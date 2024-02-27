@@ -110,7 +110,6 @@ void tcp_server(const char *port, const char *filepath) {
     FILE *fp = fopen(filepath, "wb");
     if (!fp) {
         perror("Error opening file");
-        return;
     }
 
     struct sockaddr_storage client_addr;
@@ -120,7 +119,6 @@ void tcp_server(const char *port, const char *filepath) {
     if (listen(tcp_sock, SOMAXCONN) < 0) {
         perror("listen fail");
         fclose(fp);
-        return;
     }
 
     pthread_t thread_id;
