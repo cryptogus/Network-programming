@@ -98,3 +98,11 @@ cannot execute: required file not found
 ```
 openssl-3.2.1 에서 `./Configure LIST` 명령어로 종류를 맞춰서 해보는 것 도 좋을 것 같다.
 근데 이해가 안되는게 hello world 찍는 c코드를 `arm-linux-gnueabihf-gcc` 로 빌드해서 올렸는데 이것도 같은 오류가 난다.
+아 내꺼 라즈베리 파이에 들어가서 `gcc -v` 해보니까 Target: aarch64-linux-gnu 이란다.
+
+### Chat GPT 답변
+`aarch64-linux-gnu`와 `arm-linux-gnueabihf`는 각각 ARM 아키텍처의 64비트 (ARM64)와 32비트 (ARM)용 크로스 컴파일 툴체인입니다. 이 두 툴체인은 서로 다른 아키텍처용이기 때문에 호환되지 않습니다. 따라서 `aarch64-linux-gnu-gcc`로 빌드된 실행 파일은 `arm-linux-gnueabihf`를 사용하는 시스템에서 실행되지 않습니다.
+
+만약 라즈베리 파이 4의 경우, 보통 `arm-linux-gnueabihf` 툴체인을 사용하여 빌드합니다. 라즈베리 파이 4는 ARMv8-A 아키텍처를 사용하며, 64비트 운영체제를 지원합니다. 따라서 `aarch64-linux-gnu` 툴체인을 사용할 수도 있습니다. 하지만, 보통은 32비트 운영체제를 사용하는 경우가 많습니다.
+
+빌드할 때 사용한 툴체인과 실행할 시스템의 아키텍처가 일치해야 하므로, 라즈베리 파이 4에 대해서는 `arm-linux-gnueabihf-gcc`로 빌드한 실행 파일을 사용하는 것이 적절합니다. 만약 여전히 실행이 안된다면 라즈베리 파이에서 필요한 라이브러리 및 의존성이 충분히 설치되어 있는지 확인해보세요.
