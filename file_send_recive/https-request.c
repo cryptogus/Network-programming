@@ -21,7 +21,13 @@ int main(int argc, char *argv[]) {
     if(curl) {
         
         curl_easy_setopt(curl, CURLOPT_URL, fileURL);
-        
+
+/* If you get the message curl_easy_perform() failed: SSL peer certificate or SSH remote key was not OK,
+ * you can work around it by adding a function like the one below. However, it is not recommended. 
+ */
+//        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+//        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+
         const char* filename = extract_filename(fileURL);
         
         fp = fopen(filename, "wb");
