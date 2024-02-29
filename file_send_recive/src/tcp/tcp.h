@@ -15,8 +15,8 @@
 // #include <setjmp.h> // instead of goto
 #include <pthread.h>
 
-void tcp_client(const char *ip, const char *port, const char *filepath);
-void tcp_server(const char *port, const char *filepath);
+void tcp_client(const char *ip, const char *port, const char *filename);
+void tcp_server(const char *port);
 
 struct ThreadArgs {
     int client_sock;
@@ -25,3 +25,4 @@ struct ThreadArgs {
 
 void http_request(const char *ip, const char *port, const char *message);
 #endif //__TCP_H
+

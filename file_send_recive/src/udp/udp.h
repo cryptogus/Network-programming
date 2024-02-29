@@ -15,6 +15,6 @@
 #include <sys/stat.h> // mkdir func
 // #include <setjmp.h> // instead of goto
 
-void udp_client(const char *ip, const char *port, const char *filepath);
-void udp_server(const char *port, const char *filepath);
+void udp_client(const char *ip, const char *port, const char *filename);
+void udp_server(const char *port);
 #endif //__UDP_H

@@ -11,6 +11,7 @@ target_compile_options(tcp-server-test PUBLIC -lpthread)
 
 add_executable(http-request-test ../src/tcp/tcp.c http-request-test.c)
 # COPY test files to build directory
-file(COPY test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY 30mb_test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY send DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# file(COPY test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# file(COPY 30mb_test.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 # file(COPY recieve DESTINATION ${CMAKE_CURRENT_BINARY_DIR}) directory copy, not used

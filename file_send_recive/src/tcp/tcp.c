@@ -1,5 +1,5 @@
 #include "tcp.h"
-// https://www.educative.io/answers/how-to-implement-tcp-sockets-in-c
+
 /***
  * Bind TCP port
  */
@@ -20,6 +20,7 @@ static int tcp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, c
 #endif
     if (0 != getaddrinfo(host, NULL, &hints, &result)) {
       perror("getaddrinfo error");
+      exit(1);
     }
 
     if (result->ai_family == AF_INET)
@@ -29,7 +30,7 @@ static int tcp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, c
     else {
       fprintf(stderr, "unknown ai_family %d", result->ai_family);
       freeaddrinfo(result);
-      return -1;
+      exit(1);
     }
     memcpy(addr, result->ai_addr, result->ai_addrlen);
     *addrlen = result->ai_addrlen;
@@ -37,6 +38,7 @@ static int tcp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, c
   if (-1 == (sock = socket(result->ai_family, SOCK_STREAM, IPPROTO_TCP))) {
     perror("Cannot create socket");
     freeaddrinfo(result);
+    exit(1);
   }
 
 #ifdef TCPSERVER
@@ -44,15 +46,26 @@ static int tcp_bind(struct sockaddr *addr, socklen_t* addrlen, const char *ip, c
     perror("Cannot bind");
     close(sock);
     freeaddrinfo(result);
+    exit(1);
   }
 #endif
 
  return sock;
 }
 
-void tcp_client(const char *ip, const char *port, const char *filepath) {
+// 주어진 파일 경로에서 파일 이름만 추출하여 반환하는 함수
+static char* extract_name(const char* filename) {
+    // 주어진 파일 경로에서 마지막 슬래시('/')를 찾음
+    const char* last_slash = strrchr(filename, '/');
 
-    FILE *fp = fopen(filepath, "rb");
+    // 찾은 슬래시의 다음 위치부터의 문자열이 파일 이름을 나타냄
+    return (char*)(last_slash ? last_slash + 1 : filename);
+}
+
+
+void tcp_client(const char *ip, const char *port, const char *filename) {
+
+    FILE *fp = fopen(filename, "rb");
     if (!fp) {
         perror("Error opening file");
     }
@@ -67,12 +80,17 @@ void tcp_client(const char *ip, const char *port, const char *filepath) {
     char buffer[BUFSIZ];
     size_t bytesRead;
 
+    const char* name = extract_name(filename);
+    char len = (char)strlen(name);
+    send(tcp_sock, &len, 1, 0);
+    sleep(1);
+    send(tcp_sock, name, strlen(name) + 1, 0);
+
     while((bytesRead = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
-        printf("%ld\n", bytesRead);
-         if (send(tcp_sock, buffer, bytesRead, 0) < 0) {
+        if (send(tcp_sock, buffer, bytesRead, 0) < 0) {
             perror("Error sending data");
         }
-        sleep(1); // 정보를 받고 server에서는 client로 ack를 보내는데 지금 이 속도가 너무 빨라서 서버에서 데이터를 다 못 받아오고 client만 종료됨, wireshark 로 패킷 캡처해보길
+        sleep(1);
     }
 
     fclose(fp);
@@ -83,7 +101,19 @@ void tcp_client(const char *ip, const char *port, const char *filepath) {
 
 void *handle_client(void *arg) {
     struct ThreadArgs *args = (struct ThreadArgs *)arg;
+
     char buffer[BUFSIZ];
+    // filename length
+    recv(args->client_sock, buffer, sizeof(buffer), 0);
+    // filename 변수 크기가 크면 남는 공간에 이후에 올 send 데이터를 저장해버려서 파일 write시 데이터 손실 생김
+    char filename[buffer[0] + 1];
+    recv(args->client_sock, filename, sizeof(filename), 0);
+
+    FILE *fp = fopen(filename, "wb");
+    if (!fp) {
+        perror("Error opening file");
+    }
+    args->fp = fp;
 
     while (1) {
         memset(buffer, 0, sizeof(buffer));
@@ -92,9 +122,7 @@ void *handle_client(void *arg) {
         if (reval < 0) {
             perror("Error receiving data");
             exit(1);
-        } else if (reval == 0) { // Transmission complete, TCP의 recv 함수가 0을 반환하는 경우는 일반적으로 송신자가 연결을 닫은 경우입니다.
-            // 이것은 TCP의 한 특징으로, 소켓 연결이 양방향 통신에서 닫히면 recv 함수가 0을 반환합니다.
-            // 이것은 EOF(End of File) 조건을 나타내며, 클라이언트가 더 이상 데이터를 전송하지 않고 연결을 종료했음을 의미합니다.
+        } else if (reval == 0) {
             break;
         }
         fwrite(buffer, 1, reval, args->fp);
@@ -102,15 +130,10 @@ void *handle_client(void *arg) {
 
     close(args->client_sock);
     fclose(args->fp);
-    free(args);
     pthread_exit(NULL);
 }
 
-void tcp_server(const char *port, const char *filepath) {
-    FILE *fp = fopen(filepath, "wb");
-    if (!fp) {
-        perror("Error opening file");
-    }
+void tcp_server(const char *port) {
 
     struct sockaddr_storage client_addr;
     socklen_t client_addrlen = sizeof(client_addr);
@@ -118,28 +141,22 @@ void tcp_server(const char *port, const char *filepath) {
     int tcp_sock = tcp_bind((struct sockaddr *)&client_addr, &client_addrlen, NULL, port);
     if (listen(tcp_sock, SOMAXCONN) < 0) {
         perror("listen fail");
-        fclose(fp);
     }
 
     pthread_t thread_id;
 
     while (1) {
-        struct ThreadArgs *args = (struct ThreadArgs *)malloc(sizeof(struct ThreadArgs));
-        args->client_sock = accept(tcp_sock, (struct sockaddr *)&client_addr, &client_addrlen);
-        if (args->client_sock < 0) {
+        struct ThreadArgs args;
+        args.client_sock = accept(tcp_sock, (struct sockaddr *)&client_addr, &client_addrlen);
+        if (args.client_sock < 0) {
             perror("accept fail");
-            fclose(fp);
-            free(args);
             break;
         }
 
-        args->fp = fp;
-
         // Create a new thread to handle the client
-        if (pthread_create(&thread_id, NULL, handle_client, (void *)args) != 0) {
+        if (pthread_create(&thread_id, NULL, handle_client, (void *)&args) != 0) {
             perror("Error creating thread");
-            close(args->client_sock);
-            free(args);
+            close(args.client_sock);
             continue;
         }
         pthread_detach(thread_id);
@@ -148,35 +165,4 @@ void tcp_server(const char *port, const char *filepath) {
     close(tcp_sock);
 
     printf("File receive successfully.\n");
-}
-
-void http_request(const char *ip, const char *port, const char *message) {
-
-    struct sockaddr_storage client_addr;
-    socklen_t client_addrlen = sizeof(client_addr);
-
-    int http_sock = tcp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
-    if (connect(http_sock, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
-        perror("connect error");
-
-
-    if (send(http_sock, message, strlen(message), 0) < 0) {
-        perror("Error sending http request");
-    }
-
-    char buffer[BUFSIZ];
-    while(1) {
-        int retval = recv(http_sock, buffer, BUFSIZ, 0);
-        if (retval < 0) {
-            perror("Error recv http response");
-            break;
-        }
-        buffer[retval] = '\0';
-        fprintf(stdout, "%s",buffer);
-        if (strcmp("\r\n\r\n", &buffer[retval - 4]) == 0 ) // http respond의 끝 체크
-            break;
-        memset(buffer, 0, BUFSIZ);
-    }
-
-    close(http_sock);
 }

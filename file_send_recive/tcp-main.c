@@ -2,9 +2,9 @@
 
 void usage(void) {
 #ifdef TCPSERVER
-    printf("usage: tcp-server <Port> <The name of the file to save>");
+    printf("usage: tcp-server <Port>\n");
 #else
-    printf("usage: tcp-client <Ip> <Port> <File name to send>");
+    printf("usage: tcp-client <Ip> <Port> <File name to send>\n");
 #endif
 }
 
@@ -17,15 +17,14 @@ struct Info {
 int main(int argc, char *argv[]) {
 
     struct Info info;
-    
+
 #ifdef TCPSERVER
-    if (argc != 3) {
+    if (argc != 2) {
         usage();
         return 1;
     }
     info.port = argv[1];
-    info.filename = argv[2];
-    tcp_server(info.port, info.filename);
+    tcp_server(info.port);
 #else
     if (argc != 4) {
         usage();
