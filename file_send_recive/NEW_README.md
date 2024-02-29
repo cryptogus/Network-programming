@@ -3,10 +3,13 @@
 On Ubuntu 22.04 LTS, use [libcurl](https://curl.se/libcurl/) for https requests
 ```bash
 # libssl-dev, libcurl4-openssl-dev는 pc에서 사용할 때 설치해주면 된다.
-$ sudo apt install gcc build-essential cmake make pkg-config pgcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi
-# Cross compiler 설치 확인
-$ arm-linux-gnueabihf-gcc --version
+$ sudo apt install gcc build-essential cmake make pkg-config
 ```
+## Build and Use on PC
+```bash
+$ cmake -B build -S .
+```
+## pkg-config
 `build-curl.sh`에서 쓰는 **pkg-config**와 관련하여.
 (pkg-config가 없으면 openssl lib/, include/ 다 직접 지정해줘야 해서 어지간히 귀찮은게 아니다.)
 
@@ -49,9 +52,15 @@ export PKG_CONFIG_PATH=/custom/path/to/pkgconfig:$PKG_CONFIG_PATH
 예를 들어, `openssl-3.2.1`에도 `openssl.pc` 파일을 찾아 볼 수있다.
 ## Cross-compile
 
-arm-linux-gnueabihf를 기본 설정으로 진행한다. (ARM 아키텍처에서 Linux를 타겟으로 진행)
+arm-linux-gnueabihf를 기본 설정으로 설명을 진행한다. (ARM 아키텍처에서 Linux를 타겟으로 설명 진행)
 
-따라서 build-openssl.sh, build-curl.sh, CMakeLists.txt 파일들은 target에 따라 수정이 필요하다.
+build-openssl.sh, build-zlib.sh, build-curl.sh, CMakeLists.txt 파일들 또한 arm-linux-gnueabihf를 기본 설정으로 진행하며 [target에 따라 수정이 필요하다.](#build-script-참고-자료)
+
+```bash
+$ sudo apt install gcc-arm-linux-gnueabihf
+$ # Cross compiler 설치 확인
+$ arm-linux-gnueabihf-gcc --version
+```
 
 - openssl 설치
     ```bash
@@ -70,14 +79,28 @@ arm-linux-gnueabihf를 기본 설정으로 진행한다. (ARM 아키텍처에서
     $ cmake -DCROSS_COMPILE=ON -B build -S . && cd build
     $ make -j$(nproc)
     ```
-### Test with qemu
+### Build script 참고 자료
+- `build-openssl.sh`
 
-- Install qemu
+    [configure option](https://github.com/openssl/openssl/blob/master/INSTALL.md#configuration-options)
+    [android build](https://github.com/openssl/openssl/blob/master/NOTES-ANDROID.md)
+
+- `build-curl.sh`
+
+    [libcurl](https://curl.se/docs/install.html)
+
+### Test with qemu-[아키텍쳐명]-static [실행파일]
+**working 디렉터리가 main 디렉터리 위치라고 가정한다.**
+- install qemu
     ```bash
     $ sudo apt install qemu-user-static
     ```
-working 디렉터리가 main 디렉터리 위치라고 가정한다.
-- OpenSSL test
+
+- set shared library path
+    ```bash
+    $ export LD_LIBRARY_PATH=libopenssl/lib:zlib/lib:libcurl/lib:$LD_LIBRARY_PATH
+    ```
+- openssl test
     ```bash
     $ qemu-arm-static -L /usr/arm-linux-gnueabihf libopenssl/bin/openssl
     ```
@@ -87,10 +110,29 @@ working 디렉터리가 main 디렉터리 위치라고 가정한다.
     ```
 - https request test
     ```bash
-    $ export LD_LIBRARY_PATH=libopenssl/lib
     $ qemu-arm-static -L /usr/arm-linux-gnueabihf build/https-request https://i.namu.wiki/i/ZklMtOdY5zUwpy-eDcv5ilPABYkPrcPUxO7pK5zS5OZ6JhurWRRFuNufXs-R7-bFxMW2JuaqtJBgRRworro7clCE0_bd7iP7MJAL3kIpsQeXklPqFUWR6U3v6IfFDPVJHOuMikmBzNXwpXoUC6JhkA.webp
     ```
-
+### 사용법
+- tcp server
+    ```bash
+    $ tcp-server <Port>
+    ```
+- tcp client
+    ```bash
+    $ tcp-client <Ip> <Port> <실행 파일 기준 보낼 파일 상대 경로>
+    ```
+- udp server
+    ```bash
+    $ udp-server <Port>
+    ```
+- udp client
+    ```bash
+    $ udp-client <Ip> <Port> <실행 파일 기준 보낼 파일 상대 경로>
+    ```
+- https request
+    ```bash
+    $ https-request <https url>
+    ```
 # Troubleshooting
 내가 가진 라즈베리파이 4에는 64비트 운영체제를 설치해두었다. 그런데 default로 설정된 openssl이 32비트에 맞춰 빌드해서 그런지 실행파일들이 하나같이 다음과 같은 오류를 내 뱉었다.
 ```

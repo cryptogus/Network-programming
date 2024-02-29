@@ -1,0 +1,1 @@
+rm -rf lib* curl-8.6.0/ openssl-3.2.1/ zlib*
