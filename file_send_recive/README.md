@@ -1,5 +1,14 @@
 # TCP, UDP, HTTPS for testing
 
+## To-do lists
+- udp client -> server 로 파일 올리기
+    - client가 while 문에서 계속 보내기만 하고, server 는 받기만 하는 구조
+    - 이렇게되면 (꼭 VPN 안타는 경우여도) 네트워크 경로가 좀 많아지면 받는쪽에서 보내는 속도를 못따라가서 다 못받을수가 있음
+    - 서버가 받으면 다 받았다는 응답을 client 에 보내고 client가 그 응답을 확인한 후에 다시 보내는 구조를 만들어 볼까싶음 ( client -> server -> client 이게 1사이클)
+    - recieve 쪽 버퍼가 더 커야함, 한번에 크게크게 보내야함 (4096 또는 8192 바이트 정도). 이 부분은 실제 큰 파일을 다운로드 해보면서 wireshark 로 찍어보니 보통 한 TCP 패킷당 2700 바이트 정도 잡힘. (말이 TCP지 wireshark에서는 TLS 패킷의 data 크기가 10000바이트라면 2000바이트씩 TCP 조각 데이터를 찍어주고(실제론 암호화된 데이터 2000바이트) 마지막 TCP 바이트를 TLS 패킷이라고 gui로 보여줌. packet len이 10000바이트보다 작을 것. 하지만 잘 보면 wireshark에서 데이터를 모아서 보여줌. 물론 암호화되어 있어서 읽을 순 없음, 글로 쓰는 것 보다 실제 테스트해보길 바란다.) https://ubuntu.com/download/desktop 이 사이트에서 우분투 os를 받아보면서 wireshark로 패킷 찍어보길. wireshark 필터는 ip.addr == <ubuntu.com IP>, <ubuntu.com IP>는 `ping ubuntu.com` 같은 명령어로 쉽게 알아낼 수 있다.
+- recvfrom() 전에는 select() 로 확인하고 받도록 해야 ( https://m.blog.naver.com/whtie5500/221692806173 )
+- 서버쪽에서 더 확실하게 다 받으려면, 수신만 하고 버퍼에 저장하는 쓰레드, (버퍼 확인하고) 파일에 쓰는 쓰레드 따로 만들어서 처리하거나 현재는 client가 계속 보내고 있는데, 서버 코드는 받고 바로 바로 파일에 쓰는 중임. 파일에 쓰는게 시간이 좀 걸리는 작업인데, 네트워크가 몰리게 되면 그동안 받는거를 못하니까 파일을 다 못 받고 종료함. (loopback 테스트에서는 큰 문제가 없음)
+
 On Ubuntu 22.04 LTS, use [libcurl](https://curl.se/libcurl/) for https requests
 ```bash
 $ sudo apt install gcc build-essential cmake make libssl-dev libcurl4-openssl-dev gcc-arm-linux-gnueabihf
