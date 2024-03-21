@@ -44,9 +44,11 @@ $ cmake -B build -S . -GNinja
 # $ cmake -B build -S . -GNinja -DUSE_OPENSSL=OFF
 $ cd build && ninja
 ```
+### Cross Compile <open 예정>
+
 ### Check ESTABLISHED(connected port) or LISTENING(connectivity standby port) Port Commands
 ```bash
-$ netstat -a -n --tcp
+$ netstat -a -n --tcp # netstat -ant
 ```
 ## raw socket
 Raw 소켓은 네트워크 프로그래밍에서 일반적인 소켓과는 다르게, 전송 계층(TCP, UDP)에서 직접적으로 작동하는 소켓 유형입니다. 이는 특정 프로토콜의 헤더와 데이터를 직접 다룰 수 있게 해주는데, 이를 통해 사용자가 직접 프로토콜의 세부 사항을 제어하고 네트워크 패킷을 조작할 수 있습니다.

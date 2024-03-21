@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(security-network LANGUAGES CXX)
-#set(SERVER "")
+
+option(CROSS_COMPILE "on/off cross compile" OFF)
+
 set(TCP_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/tcp-server.cpp)
 set(TCP_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/tcp-client.cpp)
 set(TLS_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/tls_server.cpp ${TCP_SERVER})
@@ -54,12 +56,11 @@ configure_file(
 )
 
 
-
 # 사용자 정의 옵션: USE_OPENSSL
 option(USE_OPENSSL "Use OpenSSL for TLS" ON)
 
 # OpenSSL을 사용하는 경우
-if(USE_OPENSSL)
+if(USE_OPENSSL AND NOT CROSS_COMPILE)
     # OpenSSL을 찾습니다.
     # REQUIRED 키워드가 사용되었기 때문에 OpenSSL을 찾을 수 없으면 CMake는 에러를 발생시키고 빌드를 중단합니다.
     find_package(OpenSSL REQUIRED)
@@ -82,4 +83,14 @@ if(USE_OPENSSL)
     else()
         message(FATAL_ERROR "OpenSSL not found. Please install OpenSSL.")
     endif()
+endif()
+# cross compile한 openssl을 링크해준다. # 추가 및 수정 예정
+if(${CROSS_COMPILE})
+    target_include_directories(tls-client PRIVATE #[[OpenSSL을 빌드 한 후 make install 까지 마친 후 include 위치]])
+    target_link_directories(tls-client PRIVATE #[[OpenSSL을 빌드 한 후 make install 까지 마친 후 lib 위치]])
+    target_link_libraries(tls-client PRIVATE ssl crypto)
+    # example
+    target_include_directories(tls-server PRIVATE libopenssl/include)
+    target_link_directories(tls-server PRIVATE libopenssl/lib)
+    target_link_libraries(tls-server PRIVATE ssl crypto)
 endif()
