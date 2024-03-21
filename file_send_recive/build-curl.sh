@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Set cross compiler and toolchain
 export CROSS_COMPILE=arm-linux-gnueabihf

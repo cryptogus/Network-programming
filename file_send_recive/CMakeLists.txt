@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 project(wallpad-test LANGUAGES C)
 
 option(CROSS_COMPILE "on/off cross compile" OFF)
-
+option(CROSS_COMPILE_ANDROID "on/off cross compile for android" OFF)
 ############### 컴파일러 및 툴체인 지정 ############### - Modifiable
 if (${CROSS_COMPILE})
     set(CMAKE_SYSTEM_NAME Linux)
@@ -12,6 +12,10 @@ if (${CROSS_COMPILE})
     set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
     set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+elseif (${CROSS_COMPILE_ANDROID})
+    set(CMAKE_SYSTEM_NAME ANDROID)
+    set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/android-ndk-r25c/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi23-clang)
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -L${CMAKE_CURRENT_LIST_DIR}/wallpadtest/android-ndk-r25c/toolchains/llvm/prebuilt/linux-x86_64/lib")
 endif()
 #####################################################
 add_subdirectory(tests)

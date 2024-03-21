@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Set cross compiler
 export CROSS_COMPILE=arm-linux-gnueabihf-

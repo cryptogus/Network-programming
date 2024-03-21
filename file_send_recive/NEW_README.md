@@ -2,7 +2,7 @@
 
 On Ubuntu 22.04 LTS, use [libcurl](https://curl.se/libcurl/) for https requests
 ```bash
-# libssl-dev, libcurl4-openssl-dev는 pc에서 사용할 때 설치해주면 된다.
+# libssl-dev, libcurl4-openssl-dev는 설치가 가능한 환경일 때만 설치해서 PC에서 처럼 빌드해주면 된다.
 $ sudo apt install gcc build-essential cmake make pkg-config
 ```
 ## Build and Use on PC
@@ -79,6 +79,29 @@ $ arm-linux-gnueabihf-gcc --version
     $ cmake -DCROSS_COMPILE=ON -B build -S . && cd build
     $ make -j$(nproc)
     ```
+
+or you can edit `CROSS_COMPILE` section in `CMakeLists.txt` for cross compiling
+```bash
+$ cmake -DCROSS_COMPILE=ON -B build -S . && cd build
+$ make -j$(nproc)
+```
+### cross compile for raspberry
+Make sure to cross-compile and link libcurl as well. Not implemented in cmake yet
+
+```bash
+$ cmake -B build -DCMAKE_TOOLCHAIN_FILE=toolchain_rasppi.cmake -S . && cd build
+$ make
+```
+### cross compile for android
+These are the scripts that I used to cross-compile for android, so please take note and modify them to use when cross-compiling.
+```bash
+$ ./build-android.sh
+$ ./build-zlib-android.sh
+$ ./build-openssl-android.sh
+$ ./build-curl-android.sh
+$ cmake -B build -DCROSS_COMPILE_ANDROID=ON -S . && cd build
+$ make
+```
 ### Build script 참고 자료
 - `build-openssl.sh`
 
