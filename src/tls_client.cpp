@@ -33,7 +33,7 @@ int TlsClient::run(void) {
     
     // 서버에 보낼 데이터
     while(true) {
-        std::cout << "Enter data to send\n" << std::endl;
+        std::cout << "Enter data to send: ";
         std::string buf = "";
         std::getline(std::cin, buf);
         if (buf == "")

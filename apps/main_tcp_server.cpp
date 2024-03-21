@@ -1,16 +1,16 @@
 #include <iostream>
 #include "tcp-server.h"
 
-void usage()
+void usage(char *name)
 {
-    printf("syntax: server-test <port>\n");
-    printf("sample: server-test 12341\n");
+    printf("syntax: %s <port>\n", name);
+    printf("sample: %s 12341\n", name);
 }
 
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
-        usage();
+        usage(argv[0]);
         return 0;
     }
     TcpServer server(argv[1]);

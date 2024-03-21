@@ -4,6 +4,8 @@ project(security-network LANGUAGES CXX)
 #set(SERVER "")
 set(TCP_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/tcp-server.cpp)
 set(TCP_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/tcp-client.cpp)
+set(TLS_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/tls_server.cpp ${TCP_SERVER})
+set(TLS_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/tls_client.cpp ${TCP_CLIENT})
 set(UDP_SERVER ${CMAKE_CURRENT_LIST_DIR}/src/udp_server.cpp)
 set(UDP_CLIENT ${CMAKE_CURRENT_LIST_DIR}/src/udp_client.cpp)
 set(TUN ${CMAKE_CURRENT_LIST_DIR}/src/lea.cpp ${CMAKE_CURRENT_LIST_DIR}/src/tun_alloc.cpp ${CMAKE_CURRENT_LIST_DIR}/src/tun_interface.cpp)
@@ -18,6 +20,12 @@ target_compile_options(tcp-server PRIVATE -Wall -Wextra -pthread) # -g) 디버�
 
 add_executable(tcp-client ${TCP_CLIENT} apps/main_tcp_client.cpp)
 target_compile_options(tcp-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
+
+add_executable(tls-server ${TLS_SERVER} apps/main_tls_server.cpp)
+target_compile_options(tls-server PRIVATE -Wall -Wextra -pthread) # -g) 디버깅 옵션 주석처리
+
+add_executable(tls-client ${TLS_CLIENT} apps/main_tls_client.cpp)
+target_compile_options(tls-client PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
 
 add_executable(udp-server ${UDP_SERVER} apps/main-udp-server.cpp)
 target_compile_options(udp-server PRIVATE -Wall -Wextra) # -g) 디버깅 옵션 주석처리
@@ -68,6 +76,9 @@ if(USE_OPENSSL)
         # 다음과 같이 라이브러리를 링크할 수 있습니다.
         target_link_libraries(tls-client-sample PUBLIC ${OPENSSL_LIBRARIES})
         target_link_libraries(tls-server-sample PUBLIC ${OPENSSL_LIBRARIES})
+
+        target_link_libraries(tls-client PUBLIC ${OPENSSL_LIBRARIES})
+        target_link_libraries(tls-server PUBLIC ${OPENSSL_LIBRARIES})
     else()
         message(FATAL_ERROR "OpenSSL not found. Please install OpenSSL.")
     endif()
