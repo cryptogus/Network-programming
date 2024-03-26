@@ -129,7 +129,7 @@ int TcpClient::run(void) {
             recv_len += retval;
         }
 
-        this->buf[retval] = '\0';
+        this->buf[recv_len] = '\0';
         printf("recving data is %s , %d-bytes\n", this->buf, retval);
     }
 
