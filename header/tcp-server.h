@@ -12,7 +12,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-
+#include <algorithm>
 #endif
 // ip ver 4 or 6
 // TCP: SOCK_STREAM, UDP: SOCK_DGRAM

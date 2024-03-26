@@ -37,6 +37,8 @@ void TcpServer::thread_sock(int &client_sock) {
     // addrlen = sizeof(client_addr)
     // getpeername(client_sock, (struct sockaddr *)&client_addr, &addrlen);
     while (true) {
+        
+        std::fill(buf, buf + BUFSIZ + 1, 0);
         int retval = recv(client_sock, buf, BUFSIZ, 0); 
         if (retval == -1) {
             fprintf(stderr, "recv fail\n");
@@ -46,7 +48,7 @@ void TcpServer::thread_sock(int &client_sock) {
             break;
         }
         // 받은 데이터 출력
-        buf[retval + 1] = '\0';
+        buf[retval] = '\0';
         printf("\n[TCP %s:%d] %s\n",ipv4, ntohs(client_addr.sin_port), buf);
         // send -> 데이터 보내기, client가 보낸만큼 다시 보내 줄 것
         retval = send(client_sock, buf, retval, 0);
