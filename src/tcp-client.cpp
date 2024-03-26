@@ -91,10 +91,10 @@ int TcpClient::run(void) {
 
     // 서버에 보낼 데이터
     while(true) {
-        std::cout << "Enter data to send\n" << std::endl;
+        std::cout << "Enter data to send(Q to quit)\n" << std::endl;
         std::string buf = "";
         std::getline(std::cin, buf);
-        if (buf == "")
+        if (buf == "" || buf == "Q" || buf == "q")
             break;
         /* char 입력 함수, buf는 멤버 변수
         if (fgets(buf, BUFSIZ + 1, stdin) == NULL)
@@ -116,14 +116,18 @@ int TcpClient::run(void) {
         }
 
         printf("[TCP client] %d-byte is sended\n", retval);
-
-        // 데이터 받기
-        retval = recv(sock_, this->buf, retval, MSG_WAITALL);
-        if (retval == -1) {
-           fprintf(stderr, "Data recving fail\n");
-        break; 
-        }else if (retval == 0)
-            break;
+        // 데이터 받기, TCP 통신의 특성상 echo client에서 수신할 데이터를 한 번에 받지 못할수있기 때문에 보낸 크기 만큼 받을 때 까지 recv를 한다.
+        int send_len = retval;
+        int recv_len = 0;
+        while(recv_len < send_len) {
+            retval = recv(sock_, this->buf, retval, MSG_WAITALL);
+            if (retval == -1) {
+               fprintf(stderr, "Data recving fail\n");
+            break; 
+            }else if (retval == 0)
+                break;
+            recv_len += retval;
+        }
 
         this->buf[retval] = '\0';
         printf("recving data is %s , %d-bytes\n", this->buf, retval);
