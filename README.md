@@ -2,7 +2,7 @@
 Protocols: TCP, UDP, Tunneling, TLS with OpenSSL  
 
 ## To do lists
-- tls server c++ 구현
+- tcp server의 멀티 스레드 부분에 오류가 있음 -> ip, port 번호가 각 client 에 맞게 출력되질 않음 mutex 적용?
 - key 교환 (또는 합의) 과정 넣기 → 양자내성암호로 넣을까? 
 - vpn header + 인증 패킷 추가.
 - 에러시 프로그램 종료가 아닌 에러 로그를 따로 남기고 에러 부분을 다시 시작할 수 있도록 코드 구성하기
