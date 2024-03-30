@@ -62,15 +62,15 @@ static char* extract_name(const char* filename) {
 
 
 void tcp_client(const char *ip, const char *port, const char *filename) {
-    
+
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
         perror("Error opening file");
     }
-    
+
     struct sockaddr_storage client_addr;
     socklen_t client_addrlen = sizeof(client_addr);
-    
+
     int tcp_sock = tcp_bind((struct sockaddr *)&client_addr, &client_addrlen, ip, port);
     if (connect(tcp_sock, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0)
         perror("connect error");
@@ -116,13 +116,13 @@ void tcp_server(const char *port) {
     }
     char check[3] = "ok";
     //while (1) { test 용이라 accept는 무한 루프 해제함
-        
+
         int client_sock = accept(tcp_sock, (struct sockaddr *)&client_addr, &client_addrlen);
         if (client_sock < 0) {
             perror("accept fail");
             //break;
         }
-        
+
         char buffer[1024];
         recv(client_sock, buffer, sizeof(buffer), 0);
         // 잘 받았다고 응답

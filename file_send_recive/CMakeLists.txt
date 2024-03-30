@@ -51,3 +51,12 @@ else()
     target_include_directories(https-request PRIVATE ${CURL_INCLUDE_DIRS})
     target_link_libraries(https-request PRIVATE ${CURL_LIBRARIES})
 endif()
+
+
+## TCP buffer error
+add_executable(client-error src/tcp-buffer-error/tcp.c tcp-main.c)
+target_include_directories(client-error PUBLIC src/tcp)
+
+add_executable(server-error src/tcp-buffer-error/tcp.c tcp-main.c)
+target_include_directories(server-error PUBLIC src/tcp)
+target_compile_definitions(server-error PRIVATE TCPSERVER)
