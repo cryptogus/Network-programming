@@ -27,6 +27,8 @@ socket rcv buffer에 남아있는 데이터가 있는지 확인해보시기 바�
 
 명시적으로 소켓을 닫지 않고 프로세스를 종료 시키는 방식은 권장하지 않습니다.
 
+만약 close 때문이 아니라면 오류가 나는 상태가 대부분 recv 버퍼 크기 < send 버퍼 크기인데, 수신측의 소켓 버퍼(windwo size)에서 recv 버퍼로 데이터를 읽어들이고 없애는 크기보다 소켓 버퍼에 send 버퍼 크기 데이터를 받아서 채워지는 크기가 더 많아서 발생하는 듯하다. 즉, 소켓 버퍼가 다 비워지지 않은 상태에서 데이터가 들어와서 그런 것이 아닐까 싶다.
+
 https://yangbongsoo.gitbook.io/study/connection_reset\
 https://kldp.org/node/137832\
 https://velog.io/@youngerjesus/Connection-Reset-by-Peer-문제-해결
